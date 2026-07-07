@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SIT Nagpur - Registration</title>
+    <style>
+        /* A few simple styles to make it look clean and proper */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .nav-menu {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 110px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 5px;
+            width: 250px;
+        }
+        button {
+            padding: 6px 15px;
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #a00000;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-left: 5px solid #800000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Area -->
+    <div class="nav-menu">
+        <b>Home</b> | <a href="courses.html">View Courses</a>
+    </div>
+    <hr>
+
+    <h1>SIT Nagpur - Student Registration</h1>
+
+    <!-- Form Inputs wrapped in structured groups -->
+    <div class="form-group">
+        <label for="studentName">Enter Name:</label>
+        <input type="text" id="studentName" placeholder="John Doe">
+    </div>
+
+    <div class="form-group">
+        <label for="studentPRN">Enter PRN:</label>
+        <input type="text" id="studentPRN" placeholder="e.g. 21070xxxxxx">
+    </div>
+    
+    <div class="form-group">
+        <label for="studentBranch">Select Branch:</label>
+        <select id="studentBranch">
+            <option value="Computer Science & Engineering">CSE</option>
+            <option value="Artificial Intelligence & Machine Learning">AI & ML</option>
+            <option value="Data Science">Data Science</option>
+        </select>
+    </div>
+    
+    <button onclick="displayData()">Show Info</button>
+
+    <!-- Output Display Panel -->
+    <div id="output" style="display:none;"></div>
+
+    <script>
+        // This triggers automatically the exact microsecond the window finishes loading
+        window.onload = function() {
+            alert("Welcome to SIT");
+        };
+
+        function displayData() {
+            let name = document.getElementById("studentName").value;
+            let prn = document.getElementById("studentPRN").value;
+            let branch = document.getElementById("studentBranch").value;
+
+            // Basic check to see if input boxes are blank
+            if (name.trim() === "" || prn.trim() === "") {
+                alert("Please fill in both Name and PRN!");
+                return;
+            }
+
+            // Unhide the output section and inject text
+            let outputDiv = document.getElementById("output");
+            outputDiv.style.display = "block";
+            outputDiv.innerHTML = 
+                "<h3>Registration Details Submitted:</h3>" +
+                "<p><b>Name:</b> " + name + "</p>" +
+                "<p><b>PRN:</b> " + prn + "</p>" +
+                "<p><b>Branch:</b> " + branch + "</p>";
+        }
+    </script>
+
+</body>
+</html>
