@@ -1,113 +1,241 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SIT Nagpur - Registration</title>
+    <title>Billing Calculator</title>
     <style>
-        /* A few simple styles to make it look clean and proper */
+        /* Centers everything perfectly in the browser viewport with an image background */
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            /* Added background image logic here */
+            background-image: url('pic.jpg'); /* Change extension to .png or .jpeg if needed */
+            background-size: cover;           /* Ensures the image fills the entire screen */
+            background-position: center;      /* Centers the background image */
+            background-repeat: no-repeat;     /* Prevents the image from repeating */
+            background-attachment: fixed;     /* Keeps the background fixed while scrolling */
+            
+            color: #333333;
         }
-        .nav-menu {
-            margin-bottom: 20px;
+
+        /* Creative Form Container Card with slightly adjusted opacity to see the background */
+        .calculator-box {
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white card */
+            padding: 35px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 360px;
+            box-sizing: border-box;
+            transition: transform 0.2s;
+            backdrop-filter: blur(5px); /* Smooth blur effect behind the card */
         }
+
+        .calculator-box:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Clean Header Typography */
+        h1 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        /* Form Group Components */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            text-align: left;
         }
+
         label {
-            display: inline-block;
-            width: 110px;
-            font-weight: bold;
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #5a6a85;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        input, select {
-            padding: 5px;
-            width: 250px;
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
+            color: #2d3748;
+            background-color: #f8fafc;
         }
+
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Creative Action Button */
         button {
-            padding: 6px 15px;
-            background-color: #800000;
-            color: white;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            color: #ffffff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transition: all 0.2s;
         }
+
         button:hover {
-            background-color: #a00000;
+            background: linear-gradient(135deg, #4338ca 0%, #2e267d 100%);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
         }
-        #output {
-            margin-top: 20px;
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Stylized Dynamic Results Metrics */
+        .results-panel {
+            background-color: #f8fafc;
+            border-radius: 10px;
             padding: 15px;
-            background-color: #fff;
-            border-left: 5px solid #800000;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+
+        .result-item.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid #e2e8f0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .result-item span:last-child {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+        }
+
+        /* Footnote Student ID Styling with background readability protection */
+        h2 {
+            color: #1e293b;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Area -->
-    <div class="nav-menu">
-        <b>Home</b> | <a href="courses.html">View Courses</a>
-    </div>
-    <hr>
+    <div class="calculator-box">
+        <h1>Billing Calculator</h1>
 
-    <h1>SIT Nagpur - Student Registration</h1>
+        <div class="form-group">
+            <label for="custName">Customer Name</label>
+            <input type="text" id="custName" placeholder="John Doe">
+        </div>
 
-    <!-- Form Inputs wrapped in structured groups -->
-    <div class="form-group">
-        <label for="studentName">Enter Name:</label>
-        <input type="text" id="studentName" placeholder="John Doe">
+        <div class="form-group">
+            <label for="prodName">Product Name</label>
+            <input type="text" id="prodName" placeholder="Wireless Mouse">
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price per Item ($)</label>
+            <input type="number" id="price" value="0" min="0" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" value="1" min="1">
+        </div>
+
+        <div class="form-group">
+            <label for="tax">Tax (%)</label>
+            <input type="number" id="tax" value="0" min="0" step="0.1">
+        </div>
+
+        <button onclick="calculateTotal()">Calculate Bill</button>
+
+        <div class="results-panel">
+            <div class="result-item">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+            </div>
+            <div class="result-item total">
+                <span>Total Amount:</span>
+                <span id="total">$0.00</span>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="studentPRN">Enter PRN:</label>
-        <input type="text" id="studentPRN" placeholder="e.g. 21070xxxxxx">
-    </div>
+    <script src="script.js"></script>
     
-    <div class="form-group">
-        <label for="studentBranch">Select Branch:</label>
-        <select id="studentBranch">
-            <option value="Computer Science & Engineering">CSE</option>
-            <option value="Artificial Intelligence & Machine Learning">AI & ML</option>
-            <option value="Data Science">Data Science</option>
-        </select>
-    </div>
-    
-    <button onclick="displayData()">Show Info</button>
-
-    <!-- Output Display Panel -->
-    <div id="output" style="display:none;"></div>
+    <h2>PRN: 24070521070</h2>
 
     <script>
-        // This triggers automatically the exact microsecond the window finishes loading
         window.onload = function() {
-            alert("Welcome to SIT");
+            greet();
         };
 
-        function displayData() {
-            let name = document.getElementById("studentName").value;
-            let prn = document.getElementById("studentPRN").value;
-            let branch = document.getElementById("studentBranch").value;
+        function greet() {
+            alert("Welcome to billing calculator!");
 
-            // Basic check to see if input boxes are blank
-            if (name.trim() === "" || prn.trim() === "") {
-                alert("Please fill in both Name and PRN!");
-                return;
-            }
+            console.table([
+                {
+                    Name : "Sample User",
+                    Course : "JavaScript"
+                }
+            ]);
+            console.time("Execution");
+            console.timeEnd("Execution");
+        }
 
-            // Unhide the output section and inject text
-            let outputDiv = document.getElementById("output");
-            outputDiv.style.display = "block";
-            outputDiv.innerHTML = 
-                "<h3>Registration Details Submitted:</h3>" +
-                "<p><b>Name:</b> " + name + "</p>" +
-                "<p><b>PRN:</b> " + prn + "</p>" +
-                "<p><b>Branch:</b> " + branch + "</p>";
+        function calculateTotal() {
+            var price = parseFloat(document.getElementById('price').value) || 0;
+            var quantity = parseFloat(document.getElementById('quantity').value) || 0;
+            var taxRate = parseFloat(document.getElementById('tax').value) || 0;
+            
+            var subtotal = price * quantity;
+            var taxAmount = subtotal * (taxRate / 100);
+            var finalTotal = subtotal + taxAmount;
+            
+            document.getElementById('subtotal').innerText = "$" + subtotal.toFixed(2);
+            document.getElementById('total').innerText = "$" + finalTotal.toFixed(2);
         }
     </script>
 
