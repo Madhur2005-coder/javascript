@@ -1,0 +1,22 @@
+//this is external file
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>SIT Nagpur - Courses</title>
+</head>
+<body>
+
+    <!-- Link to go back to the home page -->
+    <p><a href="index.html">Back to Home</a> | <b>View Courses</b></p>
+    <hr>
+
+    <h1>SIT Nagpur Offered Courses</h1>
+    
+    <ul>
+        <li><b>B.Tech Computer Science and Engineering</b> (4 Years)</li>
+        <li><b>B.Tech Artificial Intelligence and Machine Learning</b> (4 Years)</li>
+        <li><b>B.Tech Data Science</b> (4 Years)</li>
+    </ul>
+
+</body>
+</html>
