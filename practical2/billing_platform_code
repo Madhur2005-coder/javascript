@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Billing Dashboard</title>
+    <style>
+       
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f4f6f9; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative; 
+        }
+
+      
+        .dashboard-container { 
+            background: white; 
+            border-radius: 16px; 
+            width: 100%;
+            max-width: 900px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            margin-bottom: 40px; 
+        }
+
+        /* Left Side: Form Panel */
+        .input-panel {
+            flex: 1;
+            padding: 35px;
+            border-right: 1px solid #edf2f7;
+        }
+
+      
+        .preview-panel {
+            flex: 1;
+            padding: 35px;
+            background: #fafbfc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 { margin: 0 0 20px 0; color: #1a202c; font-size: 22px; }
+        .group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #4a5568; font-size: 13px; }
+        
+        input, textarea { 
+            width: 100%; 
+            padding: 10px 12px; 
+            box-sizing: border-box; 
+            border: 1px solid #cbd5e0; 
+            border-radius: 6px; 
+            font-size: 14px;
+            color: #2d3748;
+            transition: all 0.2s ease;
+        }
+        input:focus, textarea:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+        textarea { resize: vertical; height: 60px; }
+        
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #3182ce; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2b6cb0; }
+
+        
+        .empty-state {
+            text-align: center;
+            color: #a0aec0;
+            font-style: italic;
+        }
+        
+        
+        #output { 
+            padding: 24px; 
+            background: white; 
+            border: 1px dashed #cbd5e0; 
+            border-radius: 8px;
+            white-space: pre-line; 
+            line-height: 1.6; 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: #2d3748;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+       
+        .creator-credits {
+            position: fixed;
+            bottom: 16px;
+            right: 20px;
+            text-align: right;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 6px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            backdrop-filter: blur(4px);
+            font-size: 12px;
+            color: #718096;
+            line-height: 1.4;
+            border: 1px solid #e2e8f0;
+        }
+        .creator-credits strong {
+            color: #2d3748;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            .dashboard-container { flex-direction: column; }
+            .input-panel { border-right: none; border-bottom: 1px solid #edf2f7; }
+            .creator-credits { position: static; text-align: center; margin-top: 20px; width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- User Input Column -->
+    <div class="input-panel">
+        <h2>🧾 Billing Details</h2>
+        
+        <div class="group">
+            <label for="phone">Customer Phone:</label>
+            <input type="tel" id="phone" placeholder="+1 (555) 019-2834" value="+1 (555) 000-1234">
+        </div>
+        <div class="group">
+            <label for="description">Item Description:</label>
+            <textarea id="description" placeholder="Describe the service...">Web Design & Consulting</textarea>
+        </div>
+        <div class="group">
+            <label for="subtotal">Subtotal Amount ($):</label>
+            <input type="number" id="subtotal" value="500" min="0" step="0.01">
+        </div>
+        <div class="group">
+            <label for="taxRate">Tax Rate (%):</label>
+            <input type="number" id="taxRate" value="12" min="0" step="0.1">
+        </div>
+        <div class="group">
+            <label for="tipRate">Tip/Service Charge (%):</label>
+            <input type="number" id="tipRate" value="5" min="0" step="1">
+        </div>
+        <div class="group">
+            <label for="discount">Discount ($):</label>
+            <input type="number" id="discount" value="50" min="0" step="0.01">
+        </div>
+        
+        <button onclick="calculateBill()">Generate Invoice</button>
+    </div>
+
+    
+    <div class="preview-panel">
+        <h2>📄 Live Receipt</h2>
+        <div id="output">
+            <div class="empty-state">Click "Generate Invoice" to view transaction logs.</div>
+        </div>
+    </div>
+</div>
+
+
+<div class="creator-credits">
+    Created by: <strong>Madhur Wanjari</strong><br>
+    PRN: <span>24070521070</span>
+</div>
+
+<script>
+    
+    window.onload = function() {
+        alert("👋 Welcome to the Professional Billing Calculator! Fill out the forms on the left to instantly generate a print-ready invoice.");
+    };
+
+  //use of var
+    var invoiceIdCounter = 1000; 
+
+    function calculateBill() {
+       //use of const
+        const phoneInput = document.getElementById('phone');
+        const descInput = document.getElementById('description');
+        const subtotalInput = document.getElementById('subtotal');
+        const taxRateInput = document.getElementById('taxRate');
+        const tipRateInput = document.getElementById('tipRate');
+        const discountInput = document.getElementById('discount');
+        const outputDiv = document.getElementById('output');
+
+        //use of let
+        let customerPhone = phoneInput.value || "N/A";
+        let description = descInput.value || "General Services";
+        let subtotal = parseFloat(subtotalInput.value) || 0;
+        let taxRate = parseFloat(taxRateInput.value) || 0;
+        let tipRate = parseFloat(tipRateInput.value) || 0;
+        let discount = parseFloat(discountInput.value) || 0;
+
+        
+        const invoiceData = { customerPhone, description, subtotal, taxRate, tipRate, discount };
+        
+      
+        const { 
+            customerPhone: phone, 
+            description: details, 
+            subtotal: basePrice, 
+            taxRate: taxPct, 
+            tipRate: tipPct, 
+            discount: deductions 
+        } = invoiceData;
+
+        
+        const taxAmount = basePrice * (taxPct / 100);
+        const tipAmount = basePrice * (tipPct / 100);
+        const grandTotal = basePrice + taxAmount + tipAmount - deductions;
+
+        invoiceIdCounter++;
+
+        
+        outputDiv.innerHTML = `
+<strong>INVOICE #${invoiceIdCounter}</strong>
+----------------------------------
+<strong>Client Phone:</strong> ${phone}
+<strong>Details:</strong> ${details}
+----------------------------------
+Base Subtotal:   $${basePrice.toFixed(2)}
+Tax (${taxPct}%):     +$${taxAmount.toFixed(2)}
+Tip (${tipPct}%):     +$${tipAmount.toFixed(2)}
+Discount:        -$${deductions.toFixed(2)}
+----------------------------------
+<strong>TOTAL DUE:       $${grandTotal.toFixed(2)}</strong>
+----------------------------------
+Issued: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
+        `.trim();
+    }
+</script>
+
+</body>
+</html>
