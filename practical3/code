@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grading System</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --fail: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 4rem; /* Adds space so footer doesn't overlap content */
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            margin-bottom: 1.2rem;
+            font-size: 1.25rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f1f5f9;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .badge-pass {
+            background-color: #dcfce7;
+            color: var(--success);
+        }
+
+        .badge-fail {
+            background-color: #fee2e2;
+            color: var(--fail);
+        }
+
+        /* Fixed Bottom-Right Footer Styling */
+        .footer-credits {
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student Grading System</h1>
+
+    <div class="container">
+        <!-- Input Form -->
+        <div class="card">
+            <h2>Enter Details</h2>
+            <form id="gradeForm">
+                <div class="form-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="maths">Mathematics</label>
+                    <input type="number" id="maths" placeholder="Score">
+                </div>
+                <div class="form-group">
+                    <label for="science">Science</label>
+                    <input type="number" id="science" placeholder="Score">
+                </div>
+                <div class="form-group">
+                    <label for="english">English</label>
+                    <input type="number" id="english" placeholder="Score">
+                </div>
+                <div class="form-group">
+                    <label for="history">History</label>
+                    <input type="number" id="history" placeholder="Score">
+                </div>
+                <button type="submit">Calculate & Add</button>
+            </form>
+        </div>
+
+        <!-- Dashboard View -->
+        <div class="card">
+            <h2>Grading Report Dashboard</h2>
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Total (400)</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Your Name and PRN Footer Box -->
+    <div class="footer-credits">
+        Developed by: <strong>Madhur Wanjari</strong> | PRN: <strong>24070521070</strong>
+    </div>
+
+    <script>
+        document.getElementById('gradeForm').addEventListener('submit', function(e) {
+            // Prevent page refresh on submit
+            e.preventDefault();
+
+            // 1. Get values from form inputs
+            const name = document.getElementById('studentName').value.trim();
+            const mathsInput = document.getElementById('maths').value;
+            const scienceInput = document.getElementById('science').value;
+            const englishInput = document.getElementById('english').value;
+            const historyInput = document.getElementById('history').value;
+
+            // 2. BASIC VALIDATION POPUP CHECK
+            // Check if name is blank or if any mark input field is completely empty
+            if (name === "" || mathsInput === "" || scienceInput === "" || englishInput === "" || historyInput === "") {
+                alert("Error: Please fill out the Student Name and all subject marks fields!");
+                return; // Stop running the rest of the code
+            }
+
+            // 3. Convert input strings to real numbers for calculation
+            const maths = parseFloat(mathsInput);
+            const science = parseFloat(scienceInput);
+            const english = parseFloat(englishInput);
+            const history = parseFloat(historyInput);
+
+            // 4. Score range validation popup check
+            if (maths < 0 || maths > 100 || science < 0 || science > 100 || 
+                english < 0 || english > 100 || history < 0 || history > 100) {
+                alert("Error: Marks must be a number between 0 and 100!");
+                return; // Stop running the rest of the code
+            }
+
+            // 5. Compute Calculations
+            const totalMarks = maths + science + english + history;
+            const percentage = (totalMarks / 400) * 100;
+            
+            let grade = 'F';
+            let status = 'Fail';
+
+            if (percentage >= 90) {
+                grade = 'A+';
+            } else if (percentage >= 80) {
+                grade = 'A';
+            } else if (percentage >= 70) {
+                grade = 'B';
+            } else if (percentage >= 60) {
+                grade = 'C';
+            } else if (percentage >= 50) {
+                grade = 'D';
+            }
+
+            if (percentage >= 50) {
+                status = 'Pass';
+            }
+
+            // 6. Add results dynamically to table rows
+            const tbody = document.querySelector('#studentTable tbody');
+            const row = document.createElement('tr');
+            const statusClass = status === 'Pass' ? 'badge-pass' : 'badge-fail';
+
+            row.innerHTML = `
+                <td><strong>${name}</strong></td>
+                <td>${totalMarks}</td>
+                <td>${percentage.toFixed(1)}%</td>
+                <td><strong>${grade}</strong></td>
+                <td><span class="badge ${statusClass}">${status}</span></td>
+            `;
+
+            tbody.appendChild(row);
+
+            // 7. Reset form for next entry
+            document.getElementById('gradeForm').reset();
+        });
+    </script>
+</body>
+</html>
