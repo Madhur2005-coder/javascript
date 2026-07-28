@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Palindrome Checker</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        input { padding: 10px; font-size: 16px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #result { margin-top: 20px; font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <h2>Palindrome Checker</h2>
+    <input type="text" id="userInput" placeholder="Enter a word or number">
+    <button onclick="checkPalindrome()">Check</button>
+    
+    <p id="result"></p>
+
+    <script>
+        function checkPalindrome() {
+            // 1. Get the value from the input box
+            var input = document.getElementById("userInput").value;
+            
+            // 2. Convert to lowercase and remove spaces (optional, for better accuracy)
+            var cleanInput = input.toLowerCase().replace(/ /g, "");
+            
+            // 3. Reverse the string
+            var reverseInput = cleanInput.split("").reverse().join("");
+            
+            // 4. Compare and display result
+            var resultDisplay = document.getElementById("result");
+            
+            if (cleanInput === reverseInput) {
+                resultDisplay.innerHTML = "✅ Yes, it is a Palindrome!";
+                resultDisplay.style.color = "green";
+            } else {
+                resultDisplay.innerHTML = "❌ No, it is NOT a Palindrome.";
+                resultDisplay.style.color = "red";
+            }
+        }
+    </script>
+
+</body>
+</html>   
