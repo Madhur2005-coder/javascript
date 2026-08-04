@@ -1,1 +1,185 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+}
+
+.container{
+    width:600px;
+    margin:30px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px gray;
+}
+
+h1{
+    text-align:center;
+}
+
+input{
+    width:45%;
+    padding:10px;
+    margin:5px;
+}
+
+button{
+    padding:10px 15px;
+    background:green;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+button:hover{
+    background:darkgreen;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+}
+
+table,th,td{
+    border:1px solid #ccc;
+}
+
+th,td{
+    padding:10px;
+    text-align:center;
+}
+
+.remove{
+    background:red;
+}
+
+.total{
+    margin-top:20px;
+    font-size:22px;
+    font-weight:bold;
+    text-align:right;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Shopping Cart</h1>
+
+<input type="text" id="name" placeholder="Enter Item Name">
+
+<input type="number" id="price" placeholder="Enter Price">
+
+<button onclick="addItem()">Add Item</button>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Item</th>
+<th>Price</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="cart"></tbody>
+
+</table>
+
+<div class="total" id="total">
+Total = ₹0
+</div>
+
+</div>
+
+<script>
+
+// Cart Array
+let cart=[];
+
+// Add Item
+function addItem(){
+
+let itemName=document.getElementById("name").value;
+let itemPrice=Number(document.getElementById("price").value);
+
+if(itemName=="" || itemPrice<=0){
+    alert("Enter valid item name and price");
+    return;
+}
+
+// Object
+let item={
+    name:itemName,
+    price:itemPrice
+};
+
+// Store object in array
+cart.push(item);
+
+displayCart();
+
+document.getElementById("name").value="";
+document.getElementById("price").value="";
+}
+
+// Display Cart
+function displayCart(){
+
+let tbody=document.getElementById("cart");
+
+tbody.innerHTML="";
+
+let total=0;
+
+cart.forEach((item,index)=>{
+
+total += item.price;
+
+tbody.innerHTML += `
+<tr>
+<td>${item.name}</td>
+<td>₹${item.price}</td>
+<td>
+<button class="remove" onclick="removeItem(${index})">
+Delete
+</button>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("total").innerHTML="Total = ₹"+total;
+
+}
+
+// Remove Item
+function removeItem(index){
+
+cart.splice(index,1);
+
+displayCart();
+
+}
+
+</script>
+<footer class="footer">
+    Name: Madhur Wanjari &nbsp; | &nbsp; PRN: 24070521070
+</footer>
+</body>
+</html>
