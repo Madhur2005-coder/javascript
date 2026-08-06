@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Cart Calculator</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            color: var(--text);
+            position: relative; /* Needed for context if using absolute children, though footer is fixed */
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: slideUp 0.6s ease-out;
+            margin: 20px; /* Ensure space on mobile */
+        }
+
+        h2 {
+            text-align: center;
+            background: -webkit-linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        input {
+            border: none;
+            background: transparent;
+            padding: 10px;
+            outline: none;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        input[type="number"] { max-width: 100px; }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        button:active { transform: translateY(0); }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        li {
+            background: white;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        li:last-child { border-bottom: none; }
+        
+        li span:first-child { font-weight: 500; }
+        li span:last-child { 
+            font-weight: 700; 
+            color: var(--primary);
+            background: #e0e7ff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            background: #1f2937;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .stat-row.total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #4ade80; /* Bright Green */
+            opacity: 1;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #9ca3af;
+            font-style: italic;
+            padding: 1rem;
+        }
+
+        /* --- Signature Style Bottom Right --- */
+        .signature-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+            color: #333;
+            z-index: 1000;
+            animation: slideInRight 0.5s ease-out;
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        .signature-box strong {
+            display: block;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .signature-box span {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            .signature-box {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+                border-left: none;
+                border-top: 4px solid var(--primary);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🛒 My Cart</h2>
+
+        <div class="input-group">
+            <input type="text" id="itemName" placeholder="Item name..." required>
+            <input type="number" id="itemPrice" placeholder="$0.00" min="0" step="0.01" required>
+            <button onclick="addItem()">Add</button>
+        </div>
+
+        <ul id="cartList">
+            <div class="empty-msg">Your cart is empty</div>
+        </ul>
+
+        <div class="stats">
+            <div class="stat-row">
+                <span>Items</span>
+                <span id="itemCount">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Lowest Price</span>
+                <span id="minPrice">$0.00</span>
+            </div>
+            <div class="stat-row">
+                <span>Highest Price</span>
+                <span id="maxPrice">$0.00</span>
+            </div>
+            <div class="stat-row total">
+                <span>Total</span>
+                <span id="finalTotal">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signature Box Bottom Right -->
+    <div class="signature-box">
+        <strong>Madhur Wanjari</strong>
+        <span>PRN: 24070521070</span>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addItem() {
+            const nameInput = document.getElementById('itemName');
+            const priceInput = document.getElementById('itemPrice');
+            
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value);
+
+            if (name === '' || isNaN(price) || price <= 0) {
+                alert('Please enter a valid item and price.');
+                return;
+            }
+
+            cart.push({ name, price });
+
+            nameInput.value = '';
+            priceInput.value = '';
+            nameInput.focus();
+
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const listElement = document.getElementById('cartList');
+            listElement.innerHTML = ''; 
+
+            if (cart.length === 0) {
+                listElement.innerHTML = '<div class="empty-msg">Your cart is empty</div>';
+                resetStats();
+                return;
+            }
+
+            cart.forEach((item) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item.name}</span> <span>$${item.price.toFixed(2)}</span>`;
+                listElement.appendChild(li);
+            });
+
+            calculateStats();
+        }
+
+        function calculateStats() {
+            const prices = cart.map(item => item.price);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            
+            // Simple Sum (No Discount)
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            document.getElementById('itemCount').innerText = cart.length;
+            document.getElementById('minPrice').innerText = `$${minPrice.toFixed(2)}`;
+            document.getElementById('maxPrice').innerText = `$${maxPrice.toFixed(2)}`;
+            document.getElementById('finalTotal').innerText = `$${total.toFixed(2)}`;
+        }
+
+        function resetStats() {
+            document.getElementById('itemCount').innerText = '0';
+            document.getElementById('minPrice').innerText = '$0.00';
+            document.getElementById('maxPrice').innerText = '$0.00';
+            document.getElementById('finalTotal').innerText = '$0.00';
+        }
+    </script>
+</body>
+</html>   
