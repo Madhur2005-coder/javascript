@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration</title>
+  <style>
+    :root { --primary: #4f46e5; --success: #10b981; --error: #ef4444; --bg: #f3f4f6; }
+    body { font-family: system-ui, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 2rem; position: relative; min-height: 100vh; }
+    .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; }
+    input { width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+    input:focus { outline: none; border-color: var(--primary); }
+    button { width: 100%; padding: 0.875rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #4338ca; }
+    .result-box { background: #f9fafb; padding: 1rem; border-radius: 8px; margin-top: 1rem; border-left: 4px solid var(--primary); font-family: monospace; font-size: 0.9rem; }
+    .error { border-color: var(--error) !important; }
+    .success { border-color: var(--success) !important; }
+    .msg { font-size: 0.875rem; margin-top: 0.5rem; display: none; }
+    .msg.error { color: var(--error); display: block; }
+    .msg.success { color: var(--success); display: block; }
+    
+    /* Password Strength */
+    .strength-meter { height: 4px; background: #e5e7eb; margin-top: 5px; border-radius: 2px; overflow: hidden; }
+    .strength-bar { height: 100%; width: 0%; transition: width 0.3s, background 0.3s; }
+    .strength-text { font-size: 0.75rem; margin-top: 4px; color: #6b7280; }
+
+    /* Signature Fixed Bottom Right */
+    .signature {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-align: right;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Student Registration</h2>
+  
+  <div class="form-group">
+    <label for="email">Email Address:</label>
+    <input type="text" id="email" value="student123@gmail.com" placeholder="user@example.com">
+    <div id="email-msg" class="msg"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password (Min 8 chars):</label>
+    <input type="password" id="password" value="student@123" placeholder="Enter password">
+    <div class="strength-meter"><div id="strength-bar" class="strength-bar"></div></div>
+    <div id="strength-text" class="strength-text"></div>
+    <div id="password-msg" class="msg"></div>
+  </div>
+
+  <button id="submitBtn" onclick="processData()">Register & Process</button>
+
+  <div id="results" style="display:none;">
+    <div class="result-box" id="split-res"></div>
+    <div class="result-box" id="match-res"></div>
+    <div class="result-box" id="replace-res"></div>
+    <div class="result-box" id="index-res"></div>
+    <div class="result-box" id="password-res"></div>
+  </div>
+</div>
+
+<!-- Signature Bottom Right -->
+<div class="signature">
+  <strong>Madhur Wanjari</strong><br>
+  PRN: 24070521070
+</div>
+
+<script>
+  const passwordInput = document.getElementById('password');
+  const strengthBar = document.getElementById('strength-bar');
+  const strengthText = document.getElementById('strength-text');
+  const submitBtn = document.getElementById('submitBtn');
+
+  passwordInput.addEventListener('input', checkStrength);
+
+  function checkStrength() {
+    const val = passwordInput.value;
+    let strength = 0;
+    
+    if (val.length >= 8) strength++;
+    if (/[a-z]/.test(val)) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+    if (val.length === 0) {
+      strengthBar.style.width = '0%';
+      strengthText.textContent = '';
+    } else if (strength < 3) {
+      strengthBar.style.width = '30%';
+      strengthBar.style.background = 'var(--error)';
+      strengthText.textContent = 'Weak';
+    } else if (strength < 5) {
+      strengthBar.style.width = '70%';
+      strengthBar.style.background = '#f59e0b';
+      strengthText.textContent = 'Medium';
+    } else {
+      strengthBar.style.width = '100%';
+      strengthBar.style.background = 'var(--success)';
+      strengthText.textContent = 'Strong';
+    }
+  }
+
+  function processData() {
+    const email = document.getElementById('email').value.trim();
+    const password = passwordInput.value;
+    const emailMsg = document.getElementById('email-msg');
+    const passwordMsg = document.getElementById('password-msg');
+    const emailInput = document.getElementById('email');
+    const resultsDiv = document.getElementById('results');
+
+    // Reset
+    emailInput.classList.remove('error', 'success');
+    passwordInput.classList.remove('error', 'success');
+    emailMsg.className = 'msg';
+    passwordMsg.className = 'msg';
+    resultsDiv.style.display = 'none';
+
+    // Email Validation
+    if (!email || email.indexOf('@') === -1 || !email.match(/\.[a-z]{2,}$/i)) {
+      emailMsg.textContent = "Invalid email format.";
+      emailMsg.classList.add('error');
+      emailInput.classList.add('error');
+      return;
+    }
+
+    // Password Validation
+    if (password.length < 8) {
+      passwordMsg.textContent = "Password must be at least 8 characters.";
+      passwordMsg.classList.add('error');
+      passwordInput.classList.add('error');
+      return;
+    }
+
+    // Success
+    emailMsg.textContent = "Valid Email!";
+    emailMsg.classList.add('success');
+    emailInput.classList.add('success');
+    
+    passwordMsg.textContent = "Valid Password!";
+    passwordMsg.classList.add('success');
+    passwordInput.classList.add('success');
+
+    // Show Results
+    resultsDiv.style.display = 'block';
+
+    const parts = email.split('@');
+    document.getElementById('split-res').innerHTML = `<strong>1. split('@'):</strong><br>["${parts[0]}", "${parts[1]}"]`;
+
+    const domainMatch = parts[1].match(/\.[a-z]{2,}$/i);
+    document.getElementById('match-res').innerHTML = `<strong>2. match():</strong><br>Extension: "${domainMatch[0]}"`;
+
+    const cleanEmail = email.replace(/@.*$/, match => match.toLowerCase());
+    document.getElementById('replace-res').innerHTML = `<strong>3. replace():</strong><br>Sanitized: "${cleanEmail}"`;
+
+    document.getElementById('index-res').innerHTML = `<strong>4. indexOf('@'):</strong><br>Position: ${email.indexOf('@')}`;
+
+    document.getElementById('password-res').innerHTML = 
+      `<strong>Password Check:</strong><br>Length: ${password.length} chars<br>Valid: Yes`;
+
+    // Change Button Text to "Done"
+    submitBtn.textContent = "Done";
+    submitBtn.style.background = "var(--success)";
+  }
+
+  checkStrength();
+</script>
+
+</body>
+</html>   
