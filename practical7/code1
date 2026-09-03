@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do List</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 60px;
+      position: relative;
+    }
+
+    /* ── Bottom-right credit ── */
+    .credit {
+      position: fixed;
+      bottom: 16px;
+      right: 20px;
+      text-align: right;
+      color: #aaa;
+      font-size: .85rem;
+      line-height: 1.5;
+    }
+    .credit .name { font-weight: 600; color: #e94560; }
+    .credit .prn  { color: #888; }
+
+    .container {
+      background: #16213e;
+      width: 480px;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+
+    h1 {
+      color: #e94560;
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 2rem;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #0f3460;
+      border-radius: 8px;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 1rem;
+      outline: none;
+      transition: border .2s;
+    }
+
+    .input-row input:focus { border-color: #e94560; }
+
+    .btn-add {
+      padding: 12px 20px;
+      background: #e94560;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-add:hover { background: #c73650; }
+
+    #task-list { list-style: none; }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #0f3460;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      animation: slideIn .25s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .task-item .task-text {
+      flex: 1;
+      color: #eee;
+      font-size: 1rem;
+      word-break: break-word;
+      cursor: pointer;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      opacity: .5;
+    }
+
+    .task-item .edit-input {
+      display: none;
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #e94560;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .task-item.editing .task-text { display: none; }
+    .task-item.editing .edit-input { display: block; }
+
+    .btn-edit, .btn-delete {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .85rem;
+      transition: opacity .2s;
+    }
+
+    .btn-edit   { background: #533483; color: #fff; }
+    .btn-delete { background: #e94560; color: #fff; }
+    .btn-edit:hover   { opacity: .8; }
+    .btn-delete:hover { opacity: .8; }
+
+    .btn-save {
+      display: none;
+      padding: 6px 12px;
+      background: #0f9b5e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .85rem;
+    }
+
+    .task-item.editing .btn-save   { display: inline-block; }
+    .task-item.editing .btn-edit   { display: none; }
+    .task-item.editing .btn-delete { display: none; }
+
+    .empty-msg {
+      text-align: center;
+      color: #555;
+      padding: 20px;
+      font-style: italic;
+    }
+
+    .counter {
+      text-align: center;
+      color: #888;
+      margin-top: 16px;
+      font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📝 To-Do List</h1>
+
+    <div class="input-row">
+      <input type="text" id="task-input" placeholder="What needs to be done?" />
+      <button class="btn-add" id="btn-add">Add</button>
+    </div>
+
+    <ul id="task-list"></ul>
+
+    <p class="counter" id="counter">0 tasks remaining</p>
+  </div>
+
+  <!-- Bottom-right credit -->
+  <div class="credit">
+    <div class="name">Madhur Wanjari</div>
+    <div class="prn">PRN: 24070521070</div>
+  </div>
+
+<script>
+const taskInput  = document.getElementById('task-input');
+const btnAdd     = document.getElementById('btn-add');
+const taskList   = document.getElementById('task-list');
+const counter    = document.getElementById('counter');
+
+function addTask() {
+  const text = taskInput.value.trim();
+  if (!text) return;
+
+  const li = document.createElement('li');
+  li.className = 'task-item';
+  li.innerHTML = `
+    <span class="task-text">${escapeHTML(text)}</span>
+    <input class="edit-input" type="text" value="${escapeHTML(text)}" />
+    <button class="btn-edit">Edit</button>
+    <button class="btn-save">Save</button>
+    <button class="btn-delete">Delete</button>
+  `;
+
+  taskList.appendChild(li);
+
+  const empty = taskList.querySelector('.empty-msg');
+  if (empty) empty.remove();
+
+  taskInput.value = '';
+  taskInput.focus();
+  updateCounter();
+}
+
+function startEdit(li) {
+  li.classList.add('editing');
+  const editInput = li.querySelector('.edit-input');
+  editInput.value = li.querySelector('.task-text').textContent;
+  editInput.focus();
+}
+
+function saveEdit(li) {
+  const editInput = li.querySelector('.edit-input');
+  const newText   = editInput.value.trim();
+  if (newText) {
+    li.querySelector('.task-text').textContent = newText;
+  }
+  li.classList.remove('editing');
+}
+
+function deleteTask(li) {
+  li.remove();
+  updateCounter();
+  if (taskList.children.length === 0) showEmpty();
+}
+
+function toggleComplete(li) {
+  li.classList.toggle('completed');
+}
+
+taskList.addEventListener('click', (e) => {
+  const li = e.target.closest('.task-item');
+  if (!li) return;
+
+  if (e.target.classList.contains('btn-delete')) {
+    deleteTask(li);
+  } else if (e.target.classList.contains('btn-edit')) {
+    startEdit(li);
+  } else if (e.target.classList.contains('btn-save')) {
+    saveEdit(li);
+  } else if (e.target.classList.contains('task-text')) {
+    toggleComplete(li);
+  }
+});
+
+taskList.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.classList.contains('edit-input')) {
+    saveEdit(e.target.closest('.task-item'));
+  }
+  if (e.key === 'Escape' && e.target.classList.contains('edit-input')) {
+    e.target.closest('.task-item').classList.remove('editing');
+  }
+});
+
+btnAdd.addEventListener('click', addTask);
+taskInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') addTask();
+});
+
+function updateCounter() {
+  const remaining = taskList.querySelectorAll('.task-item:not(.completed)').length;
+  counter.textContent = `${remaining} task${remaining !== 1 ? 's' : ''} remaining`;
+}
+
+function showEmpty() {
+  const p = document.createElement('p');
+  p.className = 'empty-msg';
+  p.textContent = 'No tasks yet. Add one above!';
+  taskList.appendChild(p);
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+showEmpty();
+</script>
+</body>
+</html>   
