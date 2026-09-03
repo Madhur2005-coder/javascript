@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up Form</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px 80px;
+      position: relative;
+    }
+
+    /* ── Bottom-right credit ── */
+    .credit {
+      position: fixed;
+      bottom: 16px;
+      right: 20px;
+      text-align: right;
+      color: #aaa;
+      font-size: .85rem;
+      line-height: 1.5;
+    }
+    .credit .name { font-weight: 600; color: #e94560; }
+    .credit .prn  { color: #888; }
+
+    .container {
+      background: #16213e;
+      width: 520px;
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+
+    h1 {
+      color: #e94560;
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: .85rem;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      color: #ccc;
+      margin-bottom: 6px;
+      font-size: .9rem;
+    }
+
+    label .req { color: #e94560; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 2px solid #0f3460;
+      border-radius: 8px;
+      background: #1a1a2e;
+      color: #eee;
+      font-size: .95rem;
+      outline: none;
+      transition: border .2s;
+    }
+
+    input:focus, select:focus { border-color: #e94560; }
+
+    /* Validation states */
+    .form-group.error input,
+    .form-group.error select { border-color: #e94560; }
+
+    .form-group.success input,
+    .form-group.success select { border-color: #0f9b5e; }
+
+    .error-msg {
+      color: #e94560;
+      font-size: .8rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .form-group.error .error-msg { display: block; }
+
+    /* Birthday row */
+    .birthday-row {
+      display: flex;
+      gap: 10px;
+    }
+    .birthday-row .form-group { flex: 1; }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #e94560;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #e94560;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+
+    .btn-submit:hover { background: #c73650; }
+    .btn-submit:active { transform: scale(.98); }
+
+    /* Success banner */
+    .success-banner {
+      display: none;
+      background: #0f9b5e;
+      color: #fff;
+      padding: 14px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 16px;
+      font-size: .95rem;
+    }
+
+    /* Focus highlight */
+    .form-group.focused label { color: #d80427; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📋 Sign Up</h1>
+    <p class="subtitle"><span style="color:#e94560">*</span> Mandatory to fill</p>
+
+    <form id="signup-form" novalidate>
+
+      <!-- Firstname -->
+      <div class="form-group" id="fg-firstname">
+        <label for="firstname">Firstname <span class="req">*</span></label>
+        <input type="text" id="firstname" name="firstname" placeholder="Enter first name" />
+        <div class="error-msg">First name is required.</div>
+      </div>
+
+      <!-- Lastname -->
+      <div class="form-group" id="fg-lastname">
+        <label for="lastname">Lastname <span class="req">*</span></label>
+        <input type="text" id="lastname" name="lastname" placeholder="Enter last name" />
+        <div class="error-msg">Last name is required.</div>
+      </div>
+
+      <!-- Birthday -->
+      <div class="birthday-row">
+        <div class="form-group" id="fg-day">
+          <label for="day">Day <span class="req">*</span></label>
+          <select id="day" name="day">
+            <option value="">^</option>
+          </select>
+          <div class="error-msg">Select day.</div>
+        </div>
+        <div class="form-group" id="fg-month">
+          <label for="month">Month <span class="req">*</span></label>
+          <select id="month" name="month">
+            <option value="">^</option>
+          </select>
+          <div class="error-msg">Select month.</div>
+        </div>
+        <div class="form-group" id="fg-year">
+          <label for="year">Year <span class="req">*</span></label>
+          <select id="year" name="year">
+            <option value="">^</option>
+          </select>
+          <div class="error-msg">Select year.</div>
+        </div>
+      </div>
+
+      <!-- Username -->
+      <div class="form-group" id="fg-username">
+        <label for="username">Username <span class="req">*</span></label>
+        <input type="text" id="username" name="username" placeholder="Choose a username" />
+        <div class="error-msg">Username is required (min 3 chars).</div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group" id="fg-email">
+        <label for="email">E-mail <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" />
+        <div class="error-msg">Please enter a valid email address.</div>
+      </div>
+
+      <!-- Website -->
+      <div class="form-group" id="fg-website">
+        <label for="website">Website</label>
+        <input type="url" id="website" name="website" placeholder="https://yourwebsite.com" />
+        <div class="error-msg">Please enter a valid URL.</div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group" id="fg-password">
+        <label for="password">Password <span class="req">*</span></label>
+        <input type="password" id="password" name="password" placeholder="Min 6 characters" />
+        <div class="error-msg">Password must be at least 6 characters.</div>
+      </div>
+
+      <!-- Re-password -->
+      <div class="form-group" id="fg-repassword">
+        <label for="repassword">Re-password <span class="req">*</span></label>
+        <input type="password" id="repassword" name="repassword" placeholder="Confirm password" />
+        <div class="error-msg">Passwords do not match.</div>
+      </div>
+
+      <!-- Checkbox -->
+      <div class="checkbox-group" id="fg-terms">
+        <input type="checkbox" id="terms" name="terms" />
+        <label for="terms">I agree to the terms &amp; conditions <span class="req">*</span></label>
+      </div>
+      <div class="error-msg" id="terms-error" style="display:none; margin-bottom:16px;">You must agree to the terms.</div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-submit">Sign Up</button>
+
+      <!-- Success message -->
+      <div class="success-banner" id="success-banner">
+        ✅ Account created successfully!
+      </div>
+    </form>
+  </div>
+
+  <!-- Bottom-right credit -->
+  <div class="credit">
+    <div class="name">Madhur Wanjari</div>
+    <div class="prn">PRN: 24070521070</div>
+  </div>
+
+<script>
+
+
+const form       = document.getElementById('signup-form');
+const firstname  = document.getElementById('firstname');
+const lastname   = document.getElementById('lastname');
+const day        = document.getElementById('day');
+const month      = document.getElementById('month');
+const year       = document.getElementById('year');
+const username   = document.getElementById('username');
+const email      = document.getElementById('email');
+const website    = document.getElementById('website');
+const password   = document.getElementById('password');
+const rePassword = document.getElementById('repassword');
+const terms      = document.getElementById('terms');
+const banner     = document.getElementById('success-banner');
+
+
+for (let i = 1; i <= 31; i++) {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = i;
+  day.appendChild(opt);
+}
+
+
+const months = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+months.forEach((m, i) => {
+  const opt = document.createElement('option');
+  opt.value = i + 1;
+  opt.textContent = m;
+  month.appendChild(opt);
+});
+
+
+const currentYear = new Date().getFullYear();
+for (let y = currentYear; y >= 1900; y--) {
+  const opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = y;
+  year.appendChild(opt);
+}
+
+
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function validateField(input, condition) {
+  const group = input.closest('.form-group');
+  if (!group) return condition;
+  group.classList.remove('error', 'success');
+  if (condition) {
+    group.classList.add('success');
+  } else {
+    group.classList.add('error');
+  }
+  return condition;
+}
+
+function validateFirstname() {
+  return validateField(firstname, firstname.value.trim().length > 0);
+}
+
+function validateLastname() {
+  return validateField(lastname, lastname.value.trim().length > 0);
+}
+
+function validateDay()   { return validateField(day, day.value !== ''); }
+function validateMonth() { return validateField(month, month.value !== ''); }
+function validateYear()  { return validateField(year, year.value !== ''); }
+
+function validateUsername() {
+  return validateField(username, username.value.trim().length >= 3);
+}
+
+function validateEmail() {
+  return validateField(email, emailRegex.test(email.value.trim()));
+}
+
+function validateWebsite() {
+  const val = website.value.trim();
+  if (val === '') return validateField(website, true); 
+  const urlRegex = /^https?:\/\/.+\..+/;
+  return validateField(website, urlRegex.test(val));
+}
+
+function validatePassword() {
+  return validateField(password, password.value.length >= 6);
+}
+
+function validateRePassword() {
+  return validateField(rePassword, rePassword.value === password.value && rePassword.value.length > 0);
+}
+
+function validateTerms() {
+  const errEl = document.getElementById('terms-error');
+  if (terms.checked) {
+    errEl.style.display = 'none';
+    return true;
+  } else {
+    errEl.style.display = 'block';
+    return false;
+  }
+}
+
+function validateAll() {
+  const checks = [
+    validateFirstname(),
+    validateLastname(),
+    validateDay(),
+    validateMonth(),
+    validateYear(),
+    validateUsername(),
+    validateEmail(),
+    validateWebsite(),
+    validatePassword(),
+    validateRePassword(),
+    validateTerms()
+  ];
+  return checks.every(Boolean);
+}
+
+
+
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); 
+
+  if (validateAll()) {
+   
+    const data = {
+      firstname: firstname.value.trim(),
+      lastname: lastname.value.trim(),
+      birthday: `${year.value}-${month.value}-${day.value}`,
+      username: username.value.trim(),
+      email: email.value.trim(),
+      website: website.value.trim(),
+      password: '••••••'
+    };
+    console.log('Form Data:', data);
+
+    banner.style.display = 'block';
+    form.reset();
+
+    
+    document.querySelectorAll('.form-group').forEach(g =>
+      g.classList.remove('error', 'success')
+    );
+
+
+    setTimeout(() => { banner.style.display = 'none'; }, 4000);
+  } else {
+    banner.style.display = 'none';
+
+    const firstError = document.querySelector('.form-group.error, .checkbox-group + .error-msg[style*="block"]');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
+
+day.addEventListener('change', validateDay);
+month.addEventListener('change', validateMonth);
+year.addEventListener('change', validateYear);
+terms.addEventListener('change', validateTerms);
+
+
+password.addEventListener('change', () => {
+  if (rePassword.value) validateRePassword();
+});
+
+
+const focusFields = [firstname, lastname, username, email, website, password, rePassword];
+
+focusFields.forEach(field => {
+  
+  field.addEventListener('focus', () => {
+    const group = field.closest('.form-group');
+    if (group) group.classList.add('focused');
+  });
+
+
+  field.addEventListener('blur', () => {
+    const group = field.closest('.form-group');
+    if (group) group.classList.remove('focused');
+
+    switch (field) {
+      case firstname:  validateFirstname(); break;
+      case lastname:   validateLastname(); break;
+      case username:   validateUsername(); break;
+      case email:      validateEmail(); break;
+      case website:    validateWebsite(); break;
+      case password:   validatePassword(); break;
+      case rePassword: validateRePassword(); break;
+    }
+  });
+});
+
+
+[firstname, lastname, username, email, website, password, rePassword].forEach(field => {
+  field.addEventListener('input', () => {
+    const group = field.closest('.form-group');
+    if (group) group.classList.remove('error');
+  });
+});
+
+
+form.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.type !== 'checkbox') {
+    e.preventDefault();
+    form.dispatchEvent(new Event('submit'));
+  }
+});
+</script>
+
+<div class="credit">
+  <div class="name">Madhur Wanjari</div>
+  <div class="prn">PRN: 24070521070</div>
+</div>   
+</body>
+</html>   
