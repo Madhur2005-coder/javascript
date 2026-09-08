@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Pulse Gym - Admission Form</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --primary-hover: #e84118;
+            --success: #2ed573;
+            --error: #ff4757;
+            --bg: #f1f2f6;
+            --card-bg: #ffffff;
+            --text: #2f3542;
+            --border: #ced6e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Live Feedback Border Styles */
+        .form-group.success input,
+        .form-group.success select {
+            border-color: var(--success);
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:disabled {
+            background-color: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* Credit Section Styling */
+        .credit {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+            color: #a4b0be;
+            letter-spacing: 0.5px;
+            border-top: 1px dashed var(--border);
+            padding-top: 15px;
+        }
+
+        .credit .name {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Gym Admission</h2>
+        <form id="gymForm" novalidate>
+            
+            <!-- Full Name -->
+            <div class="form-group" id="nameGroup">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="John Doe">
+                <div class="error-message">Name must be at least 3 characters long.</div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group" id="emailGroup">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com">
+                <div class="error-message">Please enter a valid email address.</div>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group" id="ageGroup">
+                <label for="age">Age (Must be 16+)</label>
+                <input type="number" id="age" placeholder="25">
+                <div class="error-message">You must be 16 years or older to join.</div>
+            </div>
+
+            <!-- Membership Plan -->
+            <div class="form-group" id="planGroup">
+                <label for="membershipPlan">Membership Plan</label>
+                <select id="membershipPlan">
+                    <option value="">Select a plan...</option>
+                    <option value="monthly">Monthly Tier (₹1,500/mo)</option>
+                    <option value="quarterly">Quarterly Tier (₹4,000/3mo)</option>
+                    <option value="annual">Annual Tier (₹12,000/yr)</option>
+                </select>
+                <div class="error-message">Please select a membership plan.</div>
+            </div>
+
+            <button type="submit" id="submitBtn">Submit Application</button>
+        </form>
+
+        <!-- Credit Block Placement -->
+        <div class="credit">
+            <div class="name">Madhur Wanjari</div>
+            <div class="prn">PRN: 24070521070</div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const form = document.getElementById('gymForm');
+        const fullName = document.getElementById('fullName');
+        const email = document.getElementById('email');
+        const age = document.getElementById('age');
+        const plan = document.getElementById('membershipPlan');
+
+        // Helper: Show Error State
+        function showError(input) {
+            const formGroup = input.parentElement;
+            formGroup.classList.remove('success');
+            formGroup.classList.add('error');
+        }
+
+        // Helper: Show Success State
+        function showSuccess(input) {
+            const formGroup = input.parentElement;
+            formGroup.classList.remove('error');
+            formGroup.classList.add('success');
+        }
+
+        // Field Validation Rules
+        function validateName() {
+            const value = fullName.value.trim();
+            if (value.length >= 3) {
+                showSuccess(fullName);
+                return true;
+            } else {
+                showError(fullName);
+                return false;
+            }
+        }
+
+        function validateEmail() {
+            const value = email.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(value)) {
+                showSuccess(email);
+                return true;
+            } else {
+                showError(email);
+                return false;
+            }
+        }
+
+        function validateAge() {
+            const value = parseInt(age.value, 10);
+            if (!isNaN(value) && value >= 16 && value <= 100) {
+                showSuccess(age);
+                return true;
+            } else {
+                showError(age);
+                return false;
+            }
+        }
+
+        function validatePlan() {
+            if (plan.value !== "") {
+                showSuccess(plan);
+                return true;
+            } else {
+                showError(plan);
+                return false;
+            }
+        }
+
+        // Live Event Listeners
+        fullName.addEventListener('input', validateName);
+        email.addEventListener('input', validateEmail);
+        age.addEventListener('input', validateAge);
+        plan.addEventListener('change', validatePlan);
+
+        // Final Form Submission Handler
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isAgeValid = validateAge();
+            const isPlanValid = validatePlan();
+
+            if (isNameValid && isEmailValid && isAgeValid && isPlanValid) {
+                alert('Application submitted successfully! Welcome to Iron Pulse Gym.');
+                form.reset();
+                
+                document.querySelectorAll('.form-group').forEach(group => {
+                    group.classList.remove('success');
+                });
+            } else {
+                if (!isNameValid) fullName.focus();
+                else if (!isEmailValid) email.focus();
+                else if (!isAgeValid) age.focus();
+                else if (!isPlanValid) plan.focus();
+            }
+        });
+    </script>
+</body>
+</html>
