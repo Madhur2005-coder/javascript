@@ -3,27 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hybrid Theme Switcher</title>
+  <title>Student Admission Form</title>
   <style>
     /* Default Light Theme Variables */
     :root {
-      --bg-color: #ffffff;
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
       --text-color: #333333;
-      --btn-bg: #e0e0e0;
-      --btn-text: #333333;
+      --border-color: #cccccc;
+      --btn-bg: #007bff;
+      --btn-text: #ffffff;
+      --toggle-bg: #e0e0e0;
+      --toggle-text: #333333;
       --footer-text: #666666;
     }
 
     /* Dark Theme Variables */
     body.dark-theme {
       --bg-color: #121212;
-      --text-color: #ffffff;
-      --btn-bg: #333333;
+      --card-bg: #1e1e1e;
+      --text-color: #f5f5f5;
+      --border-color: #444444;
+      --btn-bg: #3700b3;
       --btn-text: #ffffff;
+      --toggle-bg: #333333;
+      --toggle-text: #ffffff;
       --footer-text: #aaaaaa;
     }
 
-    /* Global Transitions and Styles */
+    /* Base Layout Setup */
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
@@ -32,62 +40,117 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between; /* Pushes content and footer apart */
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      box-sizing: border-box;
       padding: 20px;
+      box-sizing: border-box;
     }
 
-    /* Main Content Container */
-    .container {
+    /* Header controls */
+    .header-actions {
+      width: 100%;
+      max-width: 600px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex-grow: 1; /* Centers the content vertically in the available space */
+      justify-content: flex-end;
+      margin-bottom: 15px;
     }
 
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    p {
-      margin-bottom: 25px;
-      text-align: center;
-      max-width: 500px;
-      line-height: 1.5;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
+    .theme-btn {
+      padding: 8px 16px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      border-radius: 8px;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      background-color: var(--toggle-bg);
+      color: var(--toggle-text);
+      transition: background-color 0.3s ease;
     }
 
-    button:hover {
+    /* Main Form Container */
+    .form-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-sizing: border-box;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    /* Form Fields Styling */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      font-size: 15px;
+      box-sizing: border-box;
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--btn-bg);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+
+    .submit-btn:hover {
       opacity: 0.9;
     }
 
-    /* Footer Styling */
+    /* Footer Layout */
     footer {
       font-size: 14px;
       font-weight: 500;
       color: var(--footer-text);
       text-align: center;
-      margin-top: 20px;
+      margin-top: 30px;
+      margin-bottom: 10px;
       transition: color 0.3s ease;
     }
   </style>
 
-  <!-- Prevent visual flash before body loads -->
+  <!-- Anti-flash active layout check -->
   <script>
     const localTheme = localStorage.getItem('theme');
     const sessionTheme = sessionStorage.getItem('theme');
@@ -99,11 +162,44 @@
 </head>
 <body>
 
-  <!-- Main interactive content -->
-  <div class="container">
-    <h1>Hybrid Theme Mode</h1>
-    <p>Dark theme lasts forever (LocalStorage). Light theme resets when you close the tab (SessionStorage).</p>
-    <button id="theme-toggle">Switch Theme</button>
+  <!-- Top Action Controls -->
+  <div class="header-actions">
+    <button class="theme-btn" id="theme-toggle">Switch Theme</button>
+  </div>
+
+  <!-- Form Window Setup -->
+  <div class="form-card">
+    <h2>Admission Form</h2>
+    <form id="admissionForm">
+      
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="emailAddress">Email Address</label>
+        <input type="email" id="emailAddress" placeholder="name@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="Enter mobile number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="courseChoice">Desired Course</label>
+        <select id="courseChoice" required>
+          <option value="">-- Select a Course --</option>
+          <option value="Computer Science">Computer Science & Engineering</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Cyber Security">Cyber Security</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Application</button>
+    </form>
   </div>
 
   <!-- Bottom Details Footer -->
@@ -112,27 +208,54 @@
   </footer>
 
   <script>
-    // Sync the root layout class to body once DOM is available
+    // --- Layout Management Logic ---
     if (document.documentElement.classList.contains('dark-theme')) {
       document.body.classList.add('dark-theme');
-      document.documentElement.classList.remove('dark-theme'); // Clean up root
+      document.documentElement.classList.remove('dark-theme');
     }
 
     const toggleBtn = document.getElementById('theme-toggle');
-
-    // Handle the click event to toggle themes
     toggleBtn.addEventListener('click', () => {
       const isDarkNow = document.body.classList.toggle('dark-theme');
-      
       if (isDarkNow) {
-        // Dark Theme -> Save permanently to Local Storage, wipe Session Storage
         localStorage.setItem('theme', 'dark');
         sessionStorage.removeItem('theme');
       } else {
-        // Light Theme -> Save temporarily to Session Storage, wipe Local Storage
         sessionStorage.setItem('theme', 'light');
         localStorage.removeItem('theme');
       }
+    });
+
+    // --- Form Autocomplete and Session Storage Logic ---
+    const form = document.getElementById('admissionForm');
+    const fields = ['fullName', 'emailAddress', 'phoneNumber', 'courseChoice'];
+
+    // 1. Restore values from sessionStorage when page opens
+    window.addEventListener('DOMContentLoaded', () => {
+      fields.forEach(fieldId => {
+        const savedValue = sessionStorage.getItem(fieldId);
+        if (savedValue) {
+          document.getElementById(fieldId).value = savedValue;
+        }
+      });
+    });
+
+    // 2. Listen for inputs and save updates directly to sessionStorage
+    fields.forEach(fieldId => {
+      const inputElement = document.getElementById(fieldId);
+      inputElement.addEventListener('input', () => {
+        sessionStorage.setItem(fieldId, inputElement.value);
+      });
+    });
+
+    // 3. Handle data capture on complete submit
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Application Form Submitted Successfully!');
+      
+      // Clear session values down once submission succeeds
+      fields.forEach(fieldId => sessionStorage.removeItem(fieldId));
+      form.reset();
     });
   </script>
 </body>
