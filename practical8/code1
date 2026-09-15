@@ -1,262 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Admission Form</title>
-  <style>
-    /* Default Light Theme Variables */
-    :root {
-      --bg-color: #f4f6f9;
-      --card-bg: #ffffff;
-      --text-color: #333333;
-      --border-color: #cccccc;
-      --btn-bg: #007bff;
-      --btn-text: #ffffff;
-      --toggle-bg: #e0e0e0;
-      --toggle-text: #333333;
-      --footer-text: #666666;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Admission</title>
 
-    /* Dark Theme Variables */
-    body.dark-theme {
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
-      --text-color: #f5f5f5;
-      --border-color: #444444;
-      --btn-bg: #3700b3;
-      --btn-text: #ffffff;
-      --toggle-bg: #333333;
-      --toggle-text: #ffffff;
-      --footer-text: #aaaaaa;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    /* Base Layout Setup */
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f1f2f6;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #24364b;
+        }
 
-    /* Header controls */
-    .header-actions {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 15px;
-    }
+        .container {
+            width: 492px;
+            background: #ffffff;
+            padding: 34px 30px 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
 
-    .theme-btn {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      border-radius: 6px;
-      background-color: var(--toggle-bg);
-      color: var(--toggle-text);
-      transition: background-color 0.3s ease;
-    }
+        h1 {
+            margin: 0 0 27px;
+            text-align: center;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: #26394e;
+        }
 
-    /* Main Form Container */
-    .form-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 30px;
-      width: 100%;
-      max-width: 600px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      box-sizing: border-box;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      text-align: center;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 10px;
-    }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #24364b;
+        }
 
-    /* Form Fields Styling */
-    .form-group {
-      margin-bottom: 18px;
-    }
+        input,
+        select {
+            width: 100%;
+            height: 47px;
+            padding: 0 13px;
+            border: 2px solid #d2dbe5;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 14px;
+            color: #26394e;
+            outline: none;
+            transition: 0.2s;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 14px;
-    }
+        input::placeholder {
+            color: #8792a0;
+        }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      font-size: 15px;
-      box-sizing: border-box;
-      transition: border-color 0.3s, background-color 0.3s;
-    }
+        input:focus,
+        select:focus {
+            border-color: #8db5e8;
+        }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--btn-bg);
-    }
+        /* Email error state */
+        .email-error input {
+            border-color: #ff4052;
+            background: #e9f0ff;
+        }
 
-    .submit-btn {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      background-color: var(--btn-bg);
-      color: var(--btn-text);
-      cursor: pointer;
-      margin-top: 10px;
-      transition: opacity 0.2s;
-    }
+        .error-message {
+            margin-top: 7px;
+            font-size: 12px;
+            color: #ff4052;
+        }
 
-    .submit-btn:hover {
-      opacity: 0.9;
-    }
+        /* Green select border shown in screenshot */
+        select {
+            border-color: #18d86d;
+            cursor: pointer;
+            appearance: auto;
+        }
 
-    /* Footer Layout */
-    footer {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--footer-text);
-      text-align: center;
-      margin-top: 30px;
-      margin-bottom: 10px;
-      transition: color 0.3s ease;
-    }
-  </style>
+        .submit-btn {
+            width: 100%;
+            height: 49px;
+            margin-top: 9px;
+            border: none;
+            border-radius: 6px;
+            background: #ff4658;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
-  <!-- Anti-flash active layout check -->
-  <script>
-    const localTheme = localStorage.getItem('theme');
-    const sessionTheme = sessionStorage.getItem('theme');
+        .submit-btn:hover {
+            background: #f4384b;
+        }
 
-    if (localTheme === 'dark' || sessionTheme === 'dark') {
-      document.documentElement.classList.add('dark-theme');
-    }
-  </script>
+        .footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px dashed #d8dfe7;
+            text-align: center;
+        }
+
+        .footer-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #34475c;
+            margin-bottom: 4px;
+        }
+
+        .footer-prn {
+            font-size: 12px;
+            color: #9aa9ba;
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 20px;
+                align-items: center;
+            }
+
+            .container {
+                width: 100%;
+                padding: 30px 22px 25px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Top Action Controls -->
-  <div class="header-actions">
-    <button class="theme-btn" id="theme-toggle">Switch Theme</button>
-  </div>
+    <div class="container">
 
-  <!-- Form Window Setup -->
-  <div class="form-card">
-    <h2>Admission Form</h2>
-    <form id="admissionForm">
-      
-      <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" placeholder="Enter full name" required>
-      </div>
+        <h1>GYM ADMISSION</h1>
 
-      <div class="form-group">
-        <label for="emailAddress">Email Address</label>
-        <input type="email" id="emailAddress" placeholder="name@example.com" required>
-      </div>
+        <form>
 
-      <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <input type="tel" id="phoneNumber" placeholder="Enter mobile number" required>
-      </div>
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="John Doe"
+                >
+            </div>
 
-      <div class="form-group">
-        <label for="courseChoice">Desired Course</label>
-        <select id="courseChoice" required>
-          <option value="">-- Select a Course --</option>
-          <option value="Computer Science">Computer Science & Engineering</option>
-          <option value="Information Technology">Information Technology</option>
-          <option value="Data Science">Data Science</option>
-          <option value="Cyber Security">Cyber Security</option>
-        </select>
-      </div>
+            <!-- Email -->
+            <div class="form-group email-error">
+                <label for="email">Email Address</label>
+                <input
+                    type="text"
+                    id="email"
+                    value="25070521261"
+                >
+                <div class="error-message">
+                    Please enter a valid email address.
+                </div>
+            </div>
 
-      <button type="submit" class="submit-btn">Submit Application</button>
-    </form>
-  </div>
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age">Age (Must be 16+)</label>
+                <input
+                    type="number"
+                    id="age"
+                    value="25"
+                    min="16"
+                >
+            </div>
 
-  <!-- Bottom Details Footer -->
-  <footer>
-    Name: Madhur Wanjari | PRN: 24070521070
-  </footer>
+            <!-- Membership -->
+            <div class="form-group">
+                <label for="membership">Membership Plan</label>
+                <select id="membership">
+                    <option>Monthly Tier (₹1,500/mo)</option>
+                    <option>Quarterly Tier (₹4,000/3mo)</option>
+                    <option>Yearly Tier (₹15,000/year)</option>
+                </select>
+            </div>
 
-  <script>
-    // --- Layout Management Logic ---
-    if (document.documentElement.classList.contains('dark-theme')) {
-      document.body.classList.add('dark-theme');
-      document.documentElement.classList.remove('dark-theme');
-    }
+            <!-- Submit -->
+            <button type="submit" class="submit-btn">
+                SUBMIT APPLICATION
+            </button>
 
-    const toggleBtn = document.getElementById('theme-toggle');
-    toggleBtn.addEventListener('click', () => {
-      const isDarkNow = document.body.classList.toggle('dark-theme');
-      if (isDarkNow) {
-        localStorage.setItem('theme', 'dark');
-        sessionStorage.removeItem('theme');
-      } else {
-        sessionStorage.setItem('theme', 'light');
-        localStorage.removeItem('theme');
-      }
-    });
+        </form>
 
-    // --- Form Autocomplete and Session Storage Logic ---
-    const form = document.getElementById('admissionForm');
-    const fields = ['fullName', 'emailAddress', 'phoneNumber', 'courseChoice'];
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-name">Madhur Wanjari</div>
+            <div class="footer-prn">PRN: 24070521070</div>
+        </div>
 
-    // 1. Restore values from sessionStorage when page opens
-    window.addEventListener('DOMContentLoaded', () => {
-      fields.forEach(fieldId => {
-        const savedValue = sessionStorage.getItem(fieldId);
-        if (savedValue) {
-          document.getElementById(fieldId).value = savedValue;
-        }
-      });
-    });
+    </div>
 
-    // 2. Listen for inputs and save updates directly to sessionStorage
-    fields.forEach(fieldId => {
-      const inputElement = document.getElementById(fieldId);
-      inputElement.addEventListener('input', () => {
-        sessionStorage.setItem(fieldId, inputElement.value);
-      });
-    });
-
-    // 3. Handle data capture on complete submit
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Application Form Submitted Successfully!');
-      
-      // Clear session values down once submission succeeds
-      fields.forEach(fieldId => sessionStorage.removeItem(fieldId));
-      form.reset();
-    });
-  </script>
 </body>
 </html>
