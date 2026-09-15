@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid Theme Switcher</title>
+  <style>
+    /* Default Light Theme Variables */
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --btn-bg: #e0e0e0;
+      --btn-text: #333333;
+      --footer-text: #666666;
+    }
+
+    /* Dark Theme Variables */
+    body.dark-theme {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --btn-bg: #333333;
+      --btn-text: #ffffff;
+      --footer-text: #aaaaaa;
+    }
+
+    /* Global Transitions and Styles */
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between; /* Pushes content and footer apart */
+      height: 100vh;
+      margin: 0;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    /* Main Content Container */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1; /* Centers the content vertically in the available space */
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 25px;
+      text-align: center;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer Styling */
+    footer {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--footer-text);
+      text-align: center;
+      margin-top: 20px;
+      transition: color 0.3s ease;
+    }
+  </style>
+
+  <!-- Prevent visual flash before body loads -->
+  <script>
+    const localTheme = localStorage.getItem('theme');
+    const sessionTheme = sessionStorage.getItem('theme');
+
+    if (localTheme === 'dark' || sessionTheme === 'dark') {
+      document.documentElement.classList.add('dark-theme');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Main interactive content -->
+  <div class="container">
+    <h1>Hybrid Theme Mode</h1>
+    <p>Dark theme lasts forever (LocalStorage). Light theme resets when you close the tab (SessionStorage).</p>
+    <button id="theme-toggle">Switch Theme</button>
+  </div>
+
+  <!-- Bottom Details Footer -->
+  <footer>
+    Name: Madhur Wanjari | PRN: 24070521070
+  </footer>
+
+  <script>
+    // Sync the root layout class to body once DOM is available
+    if (document.documentElement.classList.contains('dark-theme')) {
+      document.body.classList.add('dark-theme');
+      document.documentElement.classList.remove('dark-theme'); // Clean up root
+    }
+
+    const toggleBtn = document.getElementById('theme-toggle');
+
+    // Handle the click event to toggle themes
+    toggleBtn.addEventListener('click', () => {
+      const isDarkNow = document.body.classList.toggle('dark-theme');
+      
+      if (isDarkNow) {
+        // Dark Theme -> Save permanently to Local Storage, wipe Session Storage
+        localStorage.setItem('theme', 'dark');
+        sessionStorage.removeItem('theme');
+      } else {
+        // Light Theme -> Save temporarily to Session Storage, wipe Local Storage
+        sessionStorage.setItem('theme', 'light');
+        localStorage.removeItem('theme');
+      }
+    });
+  </script>
+</body>
+</html>
