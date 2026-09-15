@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Admission Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            width: 520px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 25px;
+            border: 1px solid #999;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #b8c8e8;
+            text-align: center;
+        }
+
+        td:first-child {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 95%;
+            padding: 6px;
+            border: 1px solid #888;
+            border-radius: 3px;
+        }
+
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .button-row {
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 25px;
+            cursor: pointer;
+            background-color: #e6e6e6;
+            border: 1px solid #777;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #d0d0d0;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #aaa;
+            text-align: center;
+        }
+
+        .footer-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .footer-prn {
+            margin-top: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>GYM ADMISSION FORM</h2>
+
+    <form id="gymForm">
+
+        <table>
+
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+
+            <!-- Name -->
+            <tr>
+                <td>Name</td>
+                <td>
+                    <input type="text" id="name" placeholder="Enter your name">
+                    <div id="nameError" class="error"></div>
+                </td>
+            </tr>
+
+            <!-- Sex -->
+            <tr>
+                <td>Sex</td>
+                <td>
+                    <input type="radio" name="sex" value="Male"> Male
+                    <br>
+                    <input type="radio" name="sex" value="Female"> Female
+                    <div id="sexError" class="error"></div>
+                </td>
+            </tr>
+
+            <!-- Eye Color -->
+            <tr>
+                <td>Eye color</td>
+                <td>
+                    <select id="eyeColor">
+                        <option value="">Select color</option>
+                        <option value="green">green</option>
+                        <option value="blue">blue</option>
+                        <option value="brown">brown</option>
+                        <option value="black">black</option>
+                    </select>
+                    <div id="eyeError" class="error"></div>
+                </td>
+            </tr>
+
+            <!-- Checkboxes -->
+            <tr>
+                <td>Check all that apply</td>
+                <td>
+                    <input type="checkbox" name="physical" value="height">
+                    Over 6 feet tall
+                    <br>
+
+                    <input type="checkbox" name="physical" value="weight">
+                    Over 200 pounds
+                </td>
+            </tr>
+
+            <!-- Description -->
+            <tr>
+                <td colspan="2">
+                    Describe your athletic ability:
+                    <br><br>
+                    <textarea id="ability"
+                        placeholder="Enter your athletic ability"></textarea>
+                    <div id="abilityError" class="error"></div>
+                </td>
+            </tr>
+
+            <!-- Submit -->
+            <tr>
+                <td colspan="2" class="button-row">
+                    <button type="submit">
+                        Enter my information
+                    </button>
+                </td>
+            </tr>
+
+        </table>
+
+        <div id="successMessage" class="success"></div>
+
+    </form>
+
+    <!-- Student Details -->
+    <div class="footer">
+        <div class="footer-name">Madhur Wanjari</div>
+        <div class="footer-prn">PRN: 24070521070</div>
+    </div>
+
+</div>
+
+
+<script>
+
+    // Accessing form fields using getElementById()
+    const nameField = document.getElementById("name");
+    const eyeColor = document.getElementById("eyeColor");
+    const ability = document.getElementById("ability");
+    const gymForm = document.getElementById("gymForm");
+
+    // Live validation for Name using input event
+    nameField.addEventListener("input", function () {
+
+        let name = nameField.value.trim();
+
+        if (name === "") {
+            document.getElementById("nameError").textContent =
+                "Name is required.";
+        }
+        else if (name.length < 3) {
+            document.getElementById("nameError").textContent =
+                "Name must contain at least 3 characters.";
+        }
+        else {
+            document.getElementById("nameError").textContent = "";
+        }
+    });
+
+
+    // Live validation for Athletic Ability
+    ability.addEventListener("input", function () {
+
+        if (ability.value.trim() === "") {
+            document.getElementById("abilityError").textContent =
+                "Please describe your athletic ability.";
+        }
+        else {
+            document.getElementById("abilityError").textContent = "";
+        }
+    });
+
+
+    // Change event for Eye Color
+    eyeColor.addEventListener("change", function () {
+
+        if (eyeColor.value === "") {
+            document.getElementById("eyeError").textContent =
+                "Please select an eye color.";
+        }
+        else {
+            document.getElementById("eyeError").textContent = "";
+        }
+    });
+
+
+    // Submit event for complete form validation
+    gymForm.addEventListener("submit", function (event) {
+
+        // Prevent default form submission
+        event.preventDefault();
+
+        let valid = true;
+
+        // Validate Name
+        if (nameField.value.trim() === "") {
+            document.getElementById("nameError").textContent =
+                "Name is required.";
+            valid = false;
+        }
+        else if (nameField.value.trim().length < 3) {
+            document.getElementById("nameError").textContent =
+                "Name must contain at least 3 characters.";
+            valid = false;
+        }
+        else {
+            document.getElementById("nameError").textContent = "";
+        }
+
+
+        // Validate Sex
+        let sexSelected = document.querySelector(
+            'input[name="sex"]:checked'
+        );
+
+        if (!sexSelected) {
+            document.getElementById("sexError").textContent =
+                "Please select your sex.";
+            valid = false;
+        }
+        else {
+            document.getElementById("sexError").textContent = "";
+        }
+
+
+        // Validate Eye Color
+        if (eyeColor.value === "") {
+            document.getElementById("eyeError").textContent =
+                "Please select an eye color.";
+            valid = false;
+        }
+        else {
+            document.getElementById("eyeError").textContent = "";
+        }
+
+
+        // Validate Athletic Ability
+        if (ability.value.trim() === "") {
+            document.getElementById("abilityError").textContent =
+                "Please describe your athletic ability.";
+            valid = false;
+        }
+        else {
+            document.getElementById("abilityError").textContent = "";
+        }
+
+
+        // Display result
+        if (valid) {
+
+            document.getElementById("successMessage").textContent =
+                "Registration successful! Your information has been submitted.";
+
+            alert("Gym Admission Form submitted successfully!");
+
+        }
+        else {
+
+            document.getElementById("successMessage").textContent = "";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
