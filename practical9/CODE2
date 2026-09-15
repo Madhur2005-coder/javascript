@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Daily Scheduler</title>
+
+<style>
+:root{
+  --bg:#121212; --card:#1e1e1e; --text:#fff;
+  --border:#444; --accent:#00adb5; --danger:#ff2e63;
+}
+body.light{
+  --bg:#f4f6f9; --card:#fff; --text:#333;
+  --border:#ddd; --accent:#007bff; --danger:#dc3545;
+}
+body{
+  margin:0; padding:20px; min-height:100vh;
+  background:var(--bg); color:var(--text);
+  font-family:Arial; transition:.3s;
+}
+.card{
+  max-width:800px; margin:30px auto; padding:25px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px;
+}
+h2{text-align:center}
+.form{
+  display:grid; grid-template-columns:1fr 1fr 1fr 2fr auto;
+  gap:8px;
+}
+input,select,button{
+  padding:10px; border-radius:5px;
+  border:1px solid var(--border);
+}
+input,select{background:var(--bg);color:var(--text)}
+button{cursor:pointer;background:var(--accent);color:white;border:0}
+.theme{float:right;background:var(--card);color:var(--text);border:1px solid var(--border)}
+li{
+  list-style:none; margin:10px 0; padding:12px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:6px; display:flex;justify-content:space-between;
+}
+.delete{background:var(--danger)}
+footer{text-align:center;color:#888;margin-top:30px}
+
+@media(max-width:700px){
+  .form{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<button class="theme" id="theme">Light Mode</button>
+
+<div class="card">
+<h2>Daily Scheduler Planner</h2>
+
+<div class="form">
+<select id="day">
+<option value="">Day</option>
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+<option>Sunday</option>
+</select>
+
+<input type="time" id="begin">
+<input type="time" id="end">
+<input type="text" id="topic" placeholder="Topic">
+
+<button onclick="add()">Add</button>
+</div>
+
+<ul id="list"></ul>
+</div>
+
+<footer>Name: Madhur Wanjari | PRN: 24070521070</footer>
+
+<script>
+
+/* ===== SESSION STORAGE =====
+   Stores unfinished form data
+*/
+day.value=sessionStorage.getItem("day")||"";
+begin.value=sessionStorage.getItem("begin")||"";
+end.value=sessionStorage.getItem("end")||"";
+topic.value=sessionStorage.getItem("topic")||"";
+
+day.onchange=()=>sessionStorage.setItem("day",day.value);
+begin.oninput=()=>sessionStorage.setItem("begin",begin.value);
+end.oninput=()=>sessionStorage.setItem("end",end.value);
+topic.oninput=()=>sessionStorage.setItem("topic",topic.value);
+
+
+/* ===== LOCAL STORAGE =====
+   Stores permanent schedule items
+*/
+let data=JSON.parse(localStorage.getItem("schedule"))||[];
+
+function show(){
+  list.innerHTML="";
+
+  data.forEach((x,i)=>{
+    list.innerHTML+=`
+      <li>
+        <span>
+          <b>${x.day}</b> |
+          ${x.begin} - ${x.end} |
+          ${x.topic}
+        </span>
+        <button class="delete" onclick="remove(${i})">
+          Delete
+        </button>
+      </li>`;
+  });
+}
+
+function add(){
+
+  if(!day.value||!begin.value||!end.value||!topic.value){
+    alert("Please fill all fields");
+    return;
+  }
+
+  if(end.value<=begin.value){
+    alert("End time must be after Begin time");
+    return;
+  }
+
+  data.push({
+    day:day.value,
+    begin:begin.value,
+    end:end.value,
+    topic:topic.value
+  });
+
+  /* SAVE SCHEDULE IN LOCAL STORAGE */
+  localStorage.setItem("schedule",JSON.stringify(data));
+
+  day.value="";
+  begin.value="";
+  end.value="";
+  topic.value="";
+
+  /* CLEAR SESSION STORAGE */
+  sessionStorage.clear();
+
+  show();
+}
+
+function remove(i){
+  data.splice(i,1);
+  localStorage.setItem("schedule",JSON.stringify(data));
+  show();
+}
+
+
+/* ===== THEME ===== */
+
+if(localStorage.getItem("theme")=="light"){
+  document.body.classList.add("light");
+  theme.innerText="Dark Mode";
+}
+
+theme.onclick=()=>{
+
+  document.body.classList.toggle("light");
+
+  let light=document.body.classList.contains("light");
+
+  localStorage.setItem("theme",light?"light":"dark");
+
+  theme.innerText=light?"Dark Mode":"Light Mode";
+};
+
+
+show();
+
+</script>
+</body>
+</html>
