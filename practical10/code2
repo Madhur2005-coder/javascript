@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concert Registration Portal</title>
+    <style>
+        :root {
+            --dark: #0f172a;
+            --accent: #d946ef;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: #0f172a;
+            --border: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--dark);
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+        .concert-card {
+            max-width: 550px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        .hero-header { text-align: center; margin-bottom: 2.5rem; }
+        h2 { color: #ffffff; font-size: 2rem; margin: 0 0 0.5rem 0; font-weight: 700; }
+        .tagline { color: var(--accent); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+        input[type="text"], input[type="email"], select {
+            width: 100%; padding: 0.8rem 1rem; background-color: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: white; font-size: 0.95rem; box-sizing: border-box; transition: all 0.2s;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(217, 70, 239, 0.25); }
+        .radio-tile-group { display: flex; flex-direction: column; gap: 0.75rem; }
+        .radio-option {
+            display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--border); padding: 1rem; border-radius: 8px; cursor: pointer;
+        }
+        input[type="radio"] { margin-right: 1rem; accent-color: var(--accent); }
+        .price { margin-left: auto; color: var(--accent); font-weight: 700; }
+        .btn-checkout {
+            width: 100%; background: linear-gradient(135deg, #d946ef 0%, #8b5cf6 100%); color: white; border: none; padding: 1rem; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(217, 70, 239, 0.4); margin-top: 1.5rem;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer strong { color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+<div class="concert-card">
+    <div class="hero-header">
+        <p class="tagline">Live Global Broadcast</p>
+        <h2>Amplified Soundwaves 2026</h2>
+    </div>
+
+    <form id="concertForm" action="/api/concert/register" method="POST">
+        <div class="form-group">
+            <label for="concertName">Full Name</label>
+            <input type="text" id="concertName" name="concertName" required placeholder="Jane Smith">
+        </div>
+
+        <div class="form-group">
+            <label for="concertEmail">Email Address</label>
+            <input type="email" id="concertEmail" name="concertEmail" required placeholder="jane.smith@example.com">
+        </div>
+
+        <div class="form-group">
+            <label>Select Your Access Pass</label>
+            <div class="radio-tile-group">
+                <label class="radio-option">
+                    <input type="radio" name="passCategory" id="passStandard" value="standard">
+                    <span>General Live Stream HD</span>
+                    <span class="price">$15.00</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="passCategory" id="passVip" value="vip">
+                    <span>VIP Access (Includes Meet & Greet)</span>
+                    <span class="price">$50.00</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="broadcastPlatform">Streaming Platform Preference</label>
+            <select id="broadcastPlatform" name="broadcastPlatform" required>
+                <option value="" disabled selected>Choose a platform</option>
+                <option value="youtube">YouTube Live</option>
+                <option value="twitch">Twitch Interactive</option>
+                <option value="zoom">Interactive Zoom Front Row</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-checkout">Proceed to Secure Checkout</button>
+    </form>
+
+    <footer>
+        <p>Submitted By: <strong>Madhur Wanjari</strong> &nbsp;|&nbsp; PRN: <strong>24070521070</strong></p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const nameField = document.getElementById("concertName");
+        const emailField = document.getElementById("concertEmail");
+        const platformSelect = document.getElementById("broadcastPlatform");
+        const standardRadio = document.getElementById("passStandard");
+        const vipRadio = document.getElementById("passVip");
+        const form = document.getElementById("concertForm");
+
+        if (localStorage.getItem("concertAttendeeName")) {
+            nameField.value = localStorage.getItem("concertAttendeeName");
+            emailField.focus();
+        } else {
+            nameField.focus();
+        }
+        if (localStorage.getItem("concertAttendeeEmail")) {
+            emailField.value = localStorage.getItem("concertAttendeeEmail");
+        }
+
+        if (sessionStorage.getItem("savedPlatform")) {
+            platformSelect.value = sessionStorage.getItem("savedPlatform");
+        }
+        
+        const cachedPassType = sessionStorage.getItem("savedPassCategory");
+        if (cachedPassType === "vip") {
+            vipRadio.checked = true;
+        } else {
+            standardRadio.checked = true;
+        }
+
+        platformSelect.addEventListener("change", function() {
+            sessionStorage.setItem("savedPlatform", platformSelect.value);
+        });
+
+        standardRadio.addEventListener("change", function() {
+            sessionStorage.setItem("savedPassCategory", "standard");
+        });
+
+        vipRadio.addEventListener("change", function() {
+            sessionStorage.setItem("savedPassCategory", "vip");
+        });
+
+        form.addEventListener("submit", function(e) {
+            localStorage.setItem("concertAttendeeName", nameField.value);
+            localStorage.setItem("concertAttendeeEmail", emailField.value);
+        });
+    });
+</script>
+</body>
+</html>
