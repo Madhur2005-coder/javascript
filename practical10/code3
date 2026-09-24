@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myCity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+        }
+        .city-name {
+            font-size: 64px;
+            color: blue;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .landmarks {
+            color: red;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .landmark-item {
+            display: inline-block;
+            margin: 10px 15px;
+            background: #ffe0e0;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+        .college-name {
+            font-size: 32px;
+            color: green;
+            margin: 30px 0;
+            animation: blink 1s step-start infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .scroll-text {
+            background-color: #333;
+            color: yellow;
+            padding: 10px 0;
+            font-size: 18px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- City Name at Top - Large & Blue -->
+    <h1 class="city-name">Mumbai</h1>
+
+    <!-- Scrolling Text -->
+    <div class="scroll-text">
+        <marquee scrollamount="8">
+            Welcome to Mumbai - The City of Dreams! | Best College: IIT Bombay |
+            Explore the beautiful landmarks of our city!
+        </marquee>
+    </div>
+
+    <!-- Landmarks in Red -->
+    <h2 class="landmarks">📍 Landmarks of Mumbai</h2>
+    <div>
+        <span class="landmark-item">Gateway of India</span>
+        <span class="landmark-item">Marine Drive</span>
+        <span class="landmark-item">Elephanta Caves</span>
+        <span class="landmark-item">Bandra-Worli Sea Link</span>
+        <span class="landmark-item">Colaba Causeway</span>
+    </div>
+
+    <!-- College Name - Blinking -->
+    <h2 class="college-name">IIT Bombay</h2>
+
+    <!-- Footer with Name & PRN -->
+    <div class="footer">
+        <p><strong>Name:</strong> Madhur Wanjari &nbsp; | &nbsp; <strong>PRN:</strong> 24070521070</p>
+    </div>
+
+</body>
+</html>   
