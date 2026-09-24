@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart India Hackathon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .navbar {
+            background-color: #1a237e;
+            padding: 12px 0;
+            text-align: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 20px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #3949ab;
+        }
+        .content {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1a237e; text-align: center; }
+        hr { border: none; border-top: 3px solid #1a237e; margin: 20px 0; }
+        .storage-section {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .storage-section h2 { color: #2e7d32; }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #1a237e;
+            color: white;
+        }
+        .btn:hover { background-color: #3949ab; }
+        .btn-delete { background-color: #c62828; }
+        .btn-delete:hover { background-color: #e53935; }
+        .result {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #1a237e;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="placement.html">Placement</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <h1>Smart India Hackathon (SIH)</h1>
+        <p>
+            Smart India Hackathon is the <b>largest hackathon</b> in the world,
+            organized by the <i>Ministry of Education</i>, Government of India.
+            It is a <u>10-day national-level open innovation event</u> that aims
+            to encourage <mark>innovative problem-solving</mark> among students.
+        </p>
+
+        <hr>
+
+        <h2>Key Highlights</h2>
+        <p>
+            The hackathon runs for <b>10 days</b> and attracts
+            <i>thousands of teams</i> from across the country. Participants
+            work in teams of up to <u>6 members</u> along with a
+            <mark>mentor</mark> to develop working prototypes.
+        </p>
+
+        <hr>
+
+        <!-- ===== LOCAL STORAGE SECTION ===== -->
+        <div class="storage-section">
+            <h2>🔒 Local Storage (Persistent)</h2>
+            <p>Data saved here persists even after closing the browser.</p>
+
+            <label for="localName">Enter Name: </label>
+            <input type="text" id="localName" placeholder="Your Name">
+            <button class="btn" onclick="saveLocal()">Save to LocalStorage</button>
+            <button class="btn" onclick="readLocal()">Read from LocalStorage</button>
+            <button class="btn btn-delete" onclick="clearLocal()">Clear LocalStorage</button>
+            <p class="result" id="localResult"></p>
+
+            <hr>
+
+            <h3>Visit Counter (LocalStorage)</h3>
+            <p class="result" id="visitCount"></p>
+        </div>
+
+        <hr>
+
+        <!-- ===== SESSION STORAGE SECTION ===== -->
+        <div class="storage-section">
+            <h2>📂 Session Storage (Per Tab)</h2>
+            <p>Data saved here is cleared when the tab is closed.</p>
+
+            <label for="sessionMsg">Enter Message: </label>
+            <input type="text" id="sessionMsg" placeholder="Your Message">
+            <button class="btn" onclick="saveSession()">Save to SessionStorage</button>
+            <button class="btn" onclick="readSession()">Read from SessionStorage</button>
+            <button class="btn btn-delete" onclick="clearSession()">Clear SessionStorage</button>
+            <p class="result" id="sessionResult"></p>
+        </div>
+
+        <hr>
+
+        <!-- ===== COMPARISON TABLE ===== -->
+        <h2>Comparison</h2>   
