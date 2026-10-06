@@ -1,0 +1,26 @@
+[
+  {
+    "employeeId": "EMP-101",
+    "employeeName": "Employee1",
+    "department": "Design",
+    "salary": 72000
+  },
+  {
+    "employeeId": "EMP-102",
+    "employeeName": "Employee2",
+    "department": "Engineering",
+    "salary": 89500
+  },
+  {
+    "employeeId": "EMP-103",
+    "employeeName": "Employee3",
+    "department": "People Operations",
+    "salary": 66500
+  },
+  {
+    "employeeId": "EMP-104",
+    "employeeName": "Employee4",
+    "department": "Finance",
+    "salary": 78100
+  }
+]

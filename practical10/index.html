@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6fa">
+  <title>People Desk | Employee Directory</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">P</span> PEOPLE DESK</div>
+      <div class="top-note">A clear view of your growing team</div>
+    </header>
+
+    <section class="intro" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">People operations / Directory</p>
+        <h1 id="pageTitle">Employee directory</h1>
+        <p class="subtitle">Keep team details organized and bring new people into the directory in a few fields.</p>
+      </div>
+      <div class="count-block" aria-live="polite">
+        <span class="count-number" id="employeeCount">0</span>
+        <span class="count-label">team members</span>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section class="form-panel" aria-labelledby="formTitle">
+        <div class="panel-heading">
+          <h2 id="formTitle">Add an employee</h2>
+          <span class="step">NEW RECORD</span>
+        </div>
+        <form id="employeeForm" class="form-content">
+          <div class="field">
+            <label for="employeeId">Employee ID</label>
+            <input id="employeeId" name="employeeId" type="text" placeholder="e.g. EMP-104" required>
+          </div>
+          <div class="field">
+            <label for="employeeName">Employee name</label>
+            <input id="employeeName" name="employeeName" type="text" placeholder="Employee1" required>
+          </div>
+          <div class="field">
+            <label for="department">Department</label>
+            <select id="department" name="department" required>
+              <option value="" disabled selected>Select department</option>
+              <option value="Design">Design</option>
+              <option value="Engineering">Engineering</option>
+              <option value="People Operations">People Operations</option>
+              <option value="Finance">Finance</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="salary">Salary (₹)</label>
+            <input id="salary" name="salary" type="number" min="0" step="0.01" placeholder="e.g. 68000" required>
+          </div>
+          <button class="primary-button" type="submit">Add to directory <span class="arrow" aria-hidden="true">&#8594;</span></button>
+        </form>
+        <div class="json-wrap" aria-live="polite">
+          <div class="json-label"><span>Serialized employee</span><span>JSON.stringify()</span></div>
+          <pre id="jsonOutput">Your employee JSON will appear here.</pre>
+        </div>
+      </section>
+
+      <section class="directory-panel" aria-labelledby="directoryTitle">
+        <div class="panel-heading directory-heading">
+          <div class="directory-title">
+            <h2 id="directoryTitle">All employees</h2>
+            <span class="table-count" id="tableCount">0 records</span>
+          </div>
+          <button class="load-button" id="loadButton" type="button"><span aria-hidden="true">&#8635;</span> Load employees</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Employee ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Salary</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="employeeRows">
+              <tr class="empty-row"><td colspan="5">Select “Load employees” to view the directory.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="status" id="statusMessage" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+
+  <script src="employee.js" defer></script>
+</body>
+</html>
