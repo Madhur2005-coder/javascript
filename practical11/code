@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Class Schedule & Timer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .scheduler-container {
+      width: 100%;
+      max-width: 480px;
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    h1 { font-size: 1.15rem; color: #94a3b8; margin: 0; font-weight: 600; }
+    .live-clock { font-family: monospace; font-size: 1.1rem; color: #38bdf8; font-weight: bold; }
+
+    .countdown-widget {
+      text-align: center;
+      background: #0f172a;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border: 1px solid #1e293b;
+    }
+
+    .countdown-widget h2 { font-size: 1.1rem; margin: 0 0 8px 0; color: #f8fafc; font-weight: 500; }
+    .timer-display { font-size: 4.5rem; font-weight: 700; font-family: monospace; color: #38bdf8; margin: 4px 0; }
+    #countdown-subtext { margin: 0; font-size: 0.85rem; color: #64748b; font-weight: 500; }
+
+    .schedule-list-section h3 { font-size: 0.95rem; color: #94a3b8; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+    .schedule-list { list-style: none; padding: 0; margin: 0; }
+
+    .schedule-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #273549;
+      border: 1px solid transparent;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .schedule-list .class-name { font-weight: 500; color: #e2e8f0; }
+    .schedule-list .class-time { color: #94a3b8; font-size: 0.9rem; font-family: monospace; }
+
+    .schedule-list li.active-row {
+      background: #0c4a6e;
+      border-color: #0284c7;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Updated footer signature element */
+    footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #334155;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    
+    footer .student-name {
+      font-weight: 600;
+      color: #38bdf8;
+    }
+    
+    footer .student-prn {
+      font-family: monospace;
+      color: #64748b;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scheduler-container">
+    <header>
+      <h1>Class Schedule Dashboard</h1>
+      <div id="current-time" class="live-clock">00:00:00</div>
+    </header>
+
+    <section class="countdown-widget">
+      <h2 id="countdown-status">Loading schedule...</h2>
+      <div id="countdown-timer" class="timer-display">00:00</div>
+      <p id="countdown-subtext"></p>
+    </section>
+
+    <section class="schedule-list-section">
+      <h3>Today's Timeline</h3>
+      <ul id="schedule-list" class="schedule-list">
+        <!-- Generated dynamically by JS -->
+      </ul>
+    </section>
+
+    <footer>
+      <div class="student-name">Madhur Wanjari</div>
+      <div class="student-prn">PRN: 24070521070</div>
+    </footer>
+  </div>
+
+  <script type="module">
+    // 1. DATA MODULE
+    function getRelativeTimeStr(offsetMinutes) {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() + offsetMinutes);
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    // Automatically adjusts to local machine time for quick, error-free testing
+    const classSchedule = [
+      { name: "First Period", start: getRelativeTimeStr(-90), end: getRelativeTimeStr(-30) },
+      { name: "Current Active Class", start: getRelativeTimeStr(-30), end: getRelativeTimeStr(10) }, 
+      { name: "Midday Recess Break", start: getRelativeTimeStr(10), end: getRelativeTimeStr(25) },
+      { name: "Upcoming Seminar", start: getRelativeTimeStr(25), end: getRelativeTimeStr(85) }
+    ];
+
+    // 2. LOGIC MODULE
+    function parseTimeString(timeStr) {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const now = new Date();
+      now.setHours(hours, minutes, 0, 0);
+      return now;
+    }
+
+    function getScheduleState(schedule) {
+      const now = new Date();
+
+      for (const item of schedule) {
+        const startTime = parseTimeString(item.start);
+        const endTime = parseTimeString(item.end);
+        if (now >= startTime && now < endTime) {
+          return { status: 'ongoing', activeClass: item, targetTime: endTime };
+        }
+      }
+
+      for (const item of schedule) {
+        const startTime = parseTimeString(item.start);
+        if (now < startTime) {
+          return { status: 'break', nextClass: item, targetTime: startTime };
+        }
+      }
+
+      return { status: 'ended', targetTime: null };
+    }
+
+    function getFormattedTimeDifference(targetDate) {
+      if (!targetDate) return "00:00";
+      const diffMs = targetDate - new Date();
+      if (diffMs <= 0) return "00:00";
+
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // 3. MAIN ORCHESTRATOR APP
+    const clockDisplay = document.getElementById('current-time');
+    const statusHeader = document.getElementById('countdown-status');
+    const timerDisplay = document.getElementById('countdown-timer');
+    const subtextDisplay = document.getElementById('countdown-subtext');
+    const scheduleListContainer = document.getElementById('schedule-list');
+
+    function generateId(str) {
+      return 'item-' + str.toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+
+    function renderScheduleList() {
+      scheduleListContainer.innerHTML = classSchedule.map(item => `
+        <li id="${generateId(item.name)}">
+          <span class="class-name">${item.name}</span>
+          <span class="class-time">${item.start} - ${item.end}</span>
+        </li>
+      `).join('');
+    }
+
+    function updateDashboard() {
+      const now = new Date();
+      clockDisplay.textContent = now.toLocaleTimeString();
+
+      const state = getScheduleState(classSchedule);
+
+      document.querySelectorAll('.schedule-list li').forEach(li => {
+        li.classList.remove('active-row');
+      });
+
+      if (state.status === 'ongoing') {
+        statusHeader.textContent = `Current Class: ${state.activeClass.name}`;
+        timerDisplay.textContent = getFormattedTimeDifference(state.targetTime);
+        subtextDisplay.textContent = `Ends at ${state.activeClass.end}`;
+        
+        const activeLi = document.getElementById(generateId(state.activeClass.name));
+        if (activeLi) activeLi.classList.add('active-row');
+        
+      } else if (state.status === 'break') {
+        statusHeader.textContent = "Recess / Transition Break";
+        timerDisplay.textContent = getFormattedTimeDifference(state.targetTime);
+        subtextDisplay.textContent = `Next up: ${state.nextClass.name} starting at ${state.nextClass.start}`;
+        
+      } else {
+        statusHeader.textContent = "Dismissal";
+        timerDisplay.textContent = "00:00";
+        subtextDisplay.textContent = "All classes finished for today!";
+      }
+    }
+
+    // Initialize layout configurations
+    renderScheduleList();
+    updateDashboard();
+
+    // Use JavaScript timer interval to cycle every 1 second
+    setInterval(updateDashboard, 1000);
+  </script>
+</body>
+</html>
