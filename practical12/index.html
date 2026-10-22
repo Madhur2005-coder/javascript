@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusConnect | Student Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <h2 class="brand">🎓 CampusConnect</h2>
+      <p class="menu-label">STUDENT MENU</p>
+      <nav>
+        <a href="#dashboard" class="nav-link active" data-page="dashboard">▦ Dashboard</a>
+        <a href="#profile" class="nav-link" data-page="profile">♙ My Profile</a>
+        <a href="#notices" class="nav-link" data-page="notices">▤ Notices</a>
+        <a href="#events" class="nav-link" data-page="events">▣ Campus Events</a>
+        <a href="#assignments" class="nav-link" data-page="assignments">☑ Assignments</a>
+      </nav>
+      <div class="sidebar-footer">Learn · Connect · Grow</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuToggle" class="menu-toggle" aria-label="Toggle menu">☰</button>
+        <div>
+          <strong id="pageTitle">Dashboard</strong>
+          <p class="muted small">Student workspace</p>
+        </div>
+        <button id="profileShortcut" class="avatar" aria-label="Open profile">A</button>
+      </header>
+
+      <div class="content">
+        <!-- DASHBOARD -->
+        <section class="page active" id="dashboard">
+          <div class="welcome">
+            <div>
+              <p class="eyebrow">YOUR COLLEGE AT A GLANCE</p>
+              <h1>Welcome back, <span id="welcomeName">Alex</span>! 👋</h1>
+              <p class="muted">Here's what's happening on campus.</p>
+            </div>
+            <button class="btn primary" id="quickAdd">+ Add Notice</button>
+          </div>
+
+          <div class="stats">
+            <article class="stat">
+              <span class="stat-icon purple">▤</span>
+              <p class="muted">Total Notices</p>
+              <h2 id="noticeCount">0</h2>
+            </article>
+            <article class="stat">
+              <span class="stat-icon orange">▣</span>
+              <p class="muted">Upcoming Events</p>
+              <h2 id="eventCount">0</h2>
+            </article>
+            <article class="stat">
+              <span class="stat-icon blue">☑</span>
+              <p class="muted">Pending Tasks</p>
+              <h2 id="pendingCount">0</h2>
+            </article>
+            <article class="stat">
+              <span class="stat-icon green">✓</span>
+              <p class="muted">Completed Tasks</p>
+              <h2 id="completedCount">0</h2>
+            </article>
+          </div>
+
+          <div class="two-columns">
+            <article class="panel">
+              <div class="panel-heading">
+                <div><h2>Recent Notices</h2><p class="muted">Latest campus updates</p></div>
+                <button class="text-btn" data-go="notices">View all →</button>
+              </div>
+              <div id="recentNotices" class="item-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading">
+                <div><h2>Upcoming Events</h2><p class="muted">What's happening next</p></div>
+                <button class="text-btn" data-go="events">View all →</button>
+              </div>
+              <div id="upcomingEvents" class="item-list"></div>
+            </article>
+          </div>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><h2>Assignment Tracker</h2><p class="muted">Monitor your academic progress</p></div>
+              <button class="text-btn" data-go="assignments">View all →</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ASSIGNMENT</th><th>SUBJECT</th><th>DUE DATE</th><th>STATUS</th></tr></thead>
+                <tbody id="dashboardAssignments"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="page" id="profile">
+          <div class="page-heading">
+            <h1>My Profile</h1>
+            <p class="muted">Manage your student details.</p>
+          </div>
+          <article class="panel profile-panel">
+            <div class="profile-header">
+              <div class="profile-avatar" id="profileAvatar">A</div>
+              <div>
+                <h2 id="profileDisplayName">Alex Morgan</h2>
+                <p id="profileDisplayCourse" class="muted">Computer Science</p>
+              </div>
+            </div>
+            <form id="profileForm" class="form-grid">
+              <div class="field">
+                <label for="studentName">Full Name</label>
+                <input id="studentName" required maxlength="80">
+              </div>
+              <div class="field">
+                <label for="studentEmail">Email Address</label>
+                <input id="studentEmail" type="email" required maxlength="120">
+              </div>
+              <div class="field">
+                <label for="studentId">Student ID</label>
+                <input id="studentId" maxlength="30">
+              </div>
+              <div class="field">
+                <label for="studentCourse">Course</label>
+                <select id="studentCourse">
+                  <option>Computer Science</option>
+                  <option>Information Technology</option>
+                  <option>Business Administration</option>
+                  <option>Mechanical Engineering</option>
+                  <option>Electronics Engineering</option>
+                  <option>Arts and Humanities</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="studentYear">Academic Year</label>
+                <select id="studentYear">
+                  <option>First Year</option>
+                  <option>Second Year</option>
+                  <option>Third Year</option>
+                  <option>Fourth Year</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="studentPhone">Phone</label>
+                <input id="studentPhone" type="tel" maxlength="20">
+              </div>
+              <button class="btn primary" type="submit">Save Profile</button>
+              <p id="profileMessage" role="status" class="success"></p>
+            </form>
+          </article>
+        </section>
+
+        <!-- NOTICES -->
+        <section class="page" id="notices">
+          <div class="page-heading heading-row">
+            <div><h1>Notices & Announcements</h1><p class="muted">Stay informed about college news.</p></div>
+            <button class="btn primary" id="addNoticeBtn">+ Create Notice</button>
+          </div>
+          <article class="panel">
+            <div class="toolbar">
+              <input id="noticeSearch" type="search" placeholder="Search notices...">
+              <select id="noticeFilter">
+                <option value="all">All Categories</option>
+                <option>Academic</option>
+                <option>Events</option>
+                <option>Exams</option>
+                <option>General</option>
+              </select>
+            </div>
+            <div id="noticeList" class="card-grid"></div>
+          </article>
+        </section>
+
+        <!-- EVENTS -->
+        <section class="page" id="events">
+          <div class="page-heading">
+            <h1>Campus Events</h1>
+            <p class="muted">Discover activities and opportunities.</p>
+          </div>
+          <div id="eventList" class="card-grid"></div>
+        </section>
+
+        <!-- ASSIGNMENTS -->
+        <section class="page" id="assignments">
+          <div class="page-heading">
+            <h1>Assignments</h1>
+            <p class="muted">Track your academic tasks and deadlines.</p>
+          </div>
+          <article class="panel">
+            <div class="toolbar">
+              <input id="assignmentSearch" type="search" placeholder="Search assignments...">
+              <select id="assignmentFilter">
+                <option value="all">All Statuses</option>
+                <option>Pending</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ASSIGNMENT</th><th>SUBJECT</th><th>DUE DATE</th><th>STATUS</th><th>ACTION</th></tr></thead>
+                <tbody id="assignmentList"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <footer class="footer">© 2026 CampusConnect · Student Portal</footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- Notice creation modal -->
+  <div class="modal-backdrop" id="noticeModal" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading">
+        <h2 id="modalTitle">Create Notice</h2>
+        <button type="button" id="closeModal" class="close-btn" aria-label="Close">×</button>
+      </div>
+      <form id="noticeForm">
+        <div class="field">
+          <label for="noticeTitle">Title</label>
+          <input id="noticeTitle" required maxlength="120" placeholder="Notice title">
+        </div>
+        <div class="field">
+          <label for="noticeCategory">Category</label>
+          <select id="noticeCategory">
+            <option>Academic</option><option>Events</option>
+            <option>Exams</option><option>General</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="noticeDescription">Description</label>
+          <textarea id="noticeDescription" rows="4" maxlength="1000" required placeholder="Write your announcement..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" id="cancelModal">Cancel</button>
+          <button type="submit" class="btn primary">Publish Notice</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
